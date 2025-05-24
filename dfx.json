@@ -1,0 +1,56 @@
+{
+  "canisters": {
+    "internet_identity": {
+      "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
+      "frontend": {},
+      "remote": {
+        "id": {
+          "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+        }
+      },
+      "type": "custom",
+      "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
+    },
+    "skillmint_backend": {
+      "build": "python -m kybra skillmint_backend src/skillmint_backend/src/main.py src/skillmint_backend/skillmint_backend.did",
+      "candid": "src/skillmint_backend/skillmint_backend.did",
+      "gzip": true,
+      "post_install": ".kybra/skillmint_backend/post_install.sh",
+      "tech_stack": {
+        "cdk": {
+          "kybra": {}
+        },
+        "language": {
+          "python": {}
+        }
+      },
+      "type": "custom",
+      "wasm": ".kybra/skillmint_backend/skillmint_backend.wasm"
+    },
+    "skillmint_frontend": {
+      "dependencies": [
+        "skillmint_backend"
+      ],
+      "source": [
+        "src/skillmint_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "skillmint_frontend"
+    }
+  },
+  "defaults": {
+    "bitcoin": {
+      "enabled": true,
+      "log_level": "info",
+      "nodes": [
+        "127.0.0.1:18444"
+      ]
+    },
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
