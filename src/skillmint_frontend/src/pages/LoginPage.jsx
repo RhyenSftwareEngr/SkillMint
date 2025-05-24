@@ -1,11 +1,33 @@
-import { Box, Typography, TextField, Button, Divider } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Divider,
+  Alert,
+} from "@mui/material";
 import { GoogleLogin } from "@react-oauth/google";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import { useState } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
 
-function LoginPage() {
+function LoginPage({ onLogin, user }) {
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  if (user) return <Navigate to="/dashboard" />;
+
   const handleEmailLogin = (e) => {
     e.preventDefault();
-    // TODO: Implement email login logic
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    const result = onLogin({ email, password });
+    if (result.error) {
+      setError(result.error);
+    } else {
+      setError("");
+      navigate("/dashboard");
+    }
   };
   const handleGoogleSuccess = (credentialResponse) => {
     // TODO: Handle Google OAuth success
@@ -18,6 +40,7 @@ function LoginPage() {
       <Typography variant="h4" gutterBottom>
         Login
       </Typography>
+      {error && <Alert severity="error">{error}</Alert>}
       <form onSubmit={handleEmailLogin}>
         <TextField
           label="Email"

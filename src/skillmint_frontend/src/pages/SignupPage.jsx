@@ -1,15 +1,32 @@
-import { Box, Typography, TextField, Button } from "@mui/material";
+import { Box, Typography, TextField, Button, Alert } from "@mui/material";
+import { useState } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
 
-function SignupPage() {
+function SignupPage({ onSignup, user }) {
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  if (user) return <Navigate to="/dashboard" />;
+
   const handleSignup = (e) => {
     e.preventDefault();
-    // TODO: Implement signup logic
+    const name = e.target.name.value;
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    const result = onSignup({ name, email, password });
+    if (result.error) {
+      setError(result.error);
+    } else {
+      setError("");
+      navigate("/dashboard");
+    }
   };
   return (
     <Box maxWidth={400} mx="auto" mt={8} p={3} boxShadow={3} borderRadius={2}>
       <Typography variant="h4" gutterBottom>
         Sign Up
       </Typography>
+      {error && <Alert severity="error">{error}</Alert>}
       <form onSubmit={handleSignup}>
         <TextField
           label="Name"
