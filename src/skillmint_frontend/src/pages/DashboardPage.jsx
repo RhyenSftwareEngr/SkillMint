@@ -534,14 +534,6 @@ const DashboardPage = () => {
                 <Grid container spacing={2}>
                   <Grid item xs={4}>
                     <Box textAlign="center">
-                      <Typography variant="h5" color="primary" fontWeight={700}>
-                        4.8
-                      </Typography>
-                      <Typography fontSize={14}>Skill Rating</Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Box textAlign="center">
                       <Typography
                         variant="h5"
                         color="success.main"
