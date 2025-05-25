@@ -7,7 +7,7 @@ import {
   Alert,
 } from "@mui/material";
 import { GoogleLogin } from "@react-oauth/google";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+// import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 
@@ -70,7 +70,7 @@ function LoginPage({ onLogin, user }) {
       </form>
       <Divider sx={{ my: 2 }}>or</Divider>
       <GoogleLogin onSuccess={handleGoogleSuccess} onError={() => {}} />
-      <Box mt={2}>
+      {/* <Box mt={2}>
         <FacebookLogin
           appId="YOUR_FACEBOOK_APP_ID"
           callback={handleFacebookResponse}
@@ -85,7 +85,7 @@ function LoginPage({ onLogin, user }) {
             </Button>
           )}
         />
-      </Box>
+      </Box> */}
     </Box>
   );
 }

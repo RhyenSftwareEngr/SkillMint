@@ -11,25 +11,14 @@
       "type": "custom",
       "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
     },
-    "skillmint_backend": {
-      "build": "python -m kybra skillmint_backend src/skillmint_backend/src/main.py src/skillmint_backend/skillmint_backend.did",
-      "candid": "src/skillmint_backend/skillmint_backend.did",
-      "gzip": true,
-      "post_install": ".kybra/skillmint_backend/post_install.sh",
-      "tech_stack": {
-        "cdk": {
-          "kybra": {}
-        },
-        "language": {
-          "python": {}
-        }
-      },
-      "type": "custom",
-      "wasm": ".kybra/skillmint_backend/skillmint_backend.wasm"
+    "skillmint_backend_main": {
+      "type": "motoko",
+      "main": "src/skillmint_backend/main.mo",
+      "args": "--enhanced-orthogonal-persistence"
     },
     "skillmint_frontend": {
       "dependencies": [
-        "skillmint_backend"
+        "skillmint_backend_main"
       ],
       "source": [
         "src/skillmint_frontend/dist"
