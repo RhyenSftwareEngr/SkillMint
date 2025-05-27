@@ -16,6 +16,7 @@
       "main": "src/skillmint_backend/main.mo",
       "args": "--enhanced-orthogonal-persistence"
     },
+    
     "skillmint_frontend": {
       "dependencies": [
         "skillmint_backend_main"

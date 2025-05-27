@@ -1,61 +1,47 @@
-import Array "mo:base/Array";
-import Text "mo:base/Text";
+// import Array "mo:base/Array";
+// import Text "mo:base/Text";
+// import Principal "mo:base/Principal";
+// import User "user";
 import Principal "mo:base/Principal";
+import UserTypes "types/UserTypes";
+import HashMap "mo:base/HashMap";
+import EventTypes "types/EventTypes";
+import Iter "mo:base/Iter";
 
-persistent actor User {
+
+actor Main {
+    stable var UserList: [(Principal,UserTypes.UserInfo)] = [];
     
-    // Variable Declaration
-    stable var first_name: Text = "N/A";
-    stable var last_name: Text = "N/A";
-    stable var email: Text = "N/A";
-    stable var phone: Text = "N/A";
-    stable var events: [(Text,Bool)] = []; //Bool 1 indicates Event Canister ID. Bool 2 indicates if its an upcomming or finished
-    stable var affiliation: [Text] = [];
-    
-    // Getters and Setters
-    public query func getFirstName() : async Text {
-        return first_name;
-    };
-    public func setFirstName(name: Text) : async () {
-        first_name := name;
-    };
-    public query func getLastName() : async Text {
-        return last_name;
-    };
-    public func setLastName(name: Text) : async () {
-        last_name := name;
-    };
-    public query func getEmail() : async Text {
-        return email;
-    };
-    public func setEmail(email_res: Text) : async () {
-        email := email_res;
-    };
-    public query func getPhone() : async Text {
-        return phone;
-    };
-    public func setPhone(phone_res: Text) : async () {
-        phone := phone_res;
-    };
-    public query func getEvents() : async [(Text,Bool)] {
-        return events;
-    };
-    public func setEvents(event: (Text,Bool)) : async () {
-        events := Array.append(events, [event]);
-    };  
-    public query func getAffiliation() : async [Text] {
-        return affiliation;
-    };
-    public func setAffiliation(aff: Text) : async () {
-        affiliation := Array.append(affiliation, [aff]);
+    private let UserMap = HashMap.HashMap<Principal, UserTypes.UserInfo>(
+        10,
+        Principal.equal,
+        Principal.hash
+        );
+
+    system func preupgrade(){
+        UserList := Iter.toArray(UserMap.entries());
     };
 
-    // Methods
-    public query (message) func whoami() : async Principal {
-        return message.caller;
+    system func postupgrade() {
+        for ((p, info) in UserList.vals()) {
+            UserMap.put(p, info);
+        };
+        UserList := [];
     };
 
-    //TODO: Delete this method
+    public shared(msg) func addUser(info:UserTypes.UserInfo): async (){
+        UserMap.put(msg.caller,info);
+    };
+
+    public query (msg) func getUser(): async ?UserTypes.UserInfo {
+        return UserMap.get(msg.caller);
+    };
+
+    public query (msg) func WhoAmI(): async Principal {
+        return msg.caller;
+    };
+
+
     public func greet(name: Text) : async Text {
         return "Hello, " # name # "!";
     };
