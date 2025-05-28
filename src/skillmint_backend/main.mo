@@ -5,7 +5,7 @@
 import Principal "mo:base/Principal";
 import UserTypes "types/UserTypes";
 import HashMap "mo:base/HashMap";
-import EventTypes "types/EventTypes";
+// import EventTypes "types/EventTypes";
 import Iter "mo:base/Iter";
 
 
@@ -18,6 +18,7 @@ actor Main {
         Principal.hash
         );
 
+    // AUTOMATICALLY SAVE AND LOAD USER EACH UPGRADE
     system func preupgrade(){
         UserList := Iter.toArray(UserMap.entries());
     };
