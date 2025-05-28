@@ -5,7 +5,7 @@ module {
         event_date: Int;
         event_end_date: ?Int;
         event_mode: {#Physical; #Virtual; #Hybrid};
-        event_location: Text;
+        event_location: ?Text;
         virtual_link: ?Text;
         registration_start: Int;
         registration_end: Int;
