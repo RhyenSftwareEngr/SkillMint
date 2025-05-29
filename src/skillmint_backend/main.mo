@@ -1,79 +1,48 @@
-// import Array "mo:base/Array";
-// import Text "mo:base/Text";
-// import Principal "mo:base/Principal";
-// import User "user";
+import Types "types";
+import Trie "mo:base/Trie";
 import Principal "mo:base/Principal";
-import UserTypes "types/UserTypes";
-import HashMap "mo:base/HashMap";
-import Buffer "mo:base/Buffer";
-import EventTypes "types/EventTypes";
-import Iter "mo:base/Iter";
+import Nat "mo:base/Nat";
+import Option "mo:base/Option";
 
+shared actor class Main(init: Types.MainStorage) = Self {
+    stable var users = Types.users_fromArray(init.users);
+    stable var events = Types.events_fromArray(init.events);
+    stable var next_event_id: Nat = 0;
 
-actor Main {
-    type UserListType = [(Principal, UserTypes.UserInfo)];
-    
-    // class Users(user: UserListType){
-    //     private let UserMap = HashMap.HashMap<Principal, UserTypes.UserInfo>(
-    //     10,
-    //     Principal.equal,
-    //     Principal.hash
-    //     );
-    //     for ((p, info) in user.vals()) {
-    //         UserMap.put(p, info);
-    //     };
-    // };
+    func user_get(id: Principal) : ?Types.UserInfo = Trie.get(users, Types.user_key(id), Principal.equal);
+    func user_put(id : Principal, info: Types.UserInfo){
+        users := Trie.put(users, Types.user_key(id), Principal.equal, info).0;
+    };
 
-    // stable var UserList: Users = Users([]);
-    
-    // public shared(msg) func addUser(info:UserTypes.UserInfo): async (){
-    //     UserList.Users.put(msg.caller,info);
-    // };
+    func event_get(id: Nat) : ?Types.EventInfo = Trie.get(events, Types.event_key(id), Nat.equal);
+    func event_put(id: Nat, info: Types.EventInfo){
+        events := Trie.put(events, Types.event_key(id), Nat.equal, info).0;
+    };
 
-    // public query (msg) func getUser(): async ?UserTypes.UserInfo {
-    //     return UserMap.get(msg.caller);
-    // };
+    public query({caller}) func getUserInfo() : async Types.UserInfo{
+        Option.get(user_get(caller), Types.blank_user_info)
+    };
 
+    //TODO: Fix this first
+    public shared({caller}) func submit_event(payload: Types.EventInfo) : async Nat {
+        let event_id = next_event_id;
+        next_event_id += 1;
 
-    // type EventListType = [EventTypes.EventInfo];
-    // public func createEvent(event: EventTypes.EventInfo): async Text {
-    //     EventBuffer.add(event);
-    //     return "Event created successfully!";
-    // };
+        let event_info = {
+            id = event_id;
+            info = payload;
+            status = #Upcoming; // Default status
+            event_organizers = user_get(caller);
+            attendees = null; // Initially no attendees
+        };
 
-    // public func getListEvent(start: Nat, end: Nat): async [EventTypes.EventInfo] {
-    //     if (start >= end or end > EventBuffer.size()) {
-    //         return [];
-    //     };
-    //     var eventSlice = Buffer.Buffer<EventTypes.EventInfo>(end - start);
-    //     for (i in Iter.range(start,end)) {
-    //         eventSlice.add(EventBuffer.get(i));
-    //     };
-    //     return eventSlice.toArray();
-    // };
+        event_put(event_id, event_info.info);
+        events := Trie.put(events, Types.event_key(event_id), Nat.equal, event_info.info).0;
 
-    // public func getEventByIndex(index: Nat): async ?EventTypes.EventInfo {
-    //     return EventBuffer.getOpt(index);
-    // };
-    // var EventBuffer = Buffer.Buffer<EventTypes.EventInfo>(event.size());
-    
+        return event_id;
+    };
 
-    // AUTOMATICALLY SAVE AND LOAD USER EACH UPGRADE
-    // system func preupgrade(){
-    //     UserList := Iter.toArray(UserMap.entries());
-    //     EventList := [EventBuffer.toArray()];
-    // };
-
-    // system func postupgrade() {
-    //     for ((p, info) in UserList.vals()) {
-    //         UserMap.put(p, info);
-    //     };
-    //     UserList := [];
-    // };
-
-    // User Management Functions
-
-
+    //Random function to test the actor. Please remove it in production.
     public query (msg) func WhoAmI(): async Principal {
         return msg.caller;
     };
