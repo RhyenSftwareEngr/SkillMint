@@ -1,7 +1,9 @@
 
 
 function ProfilePage() {
-  return (
+  return (<div>
+      Profile Page
+    </div>)
 
 }
 
