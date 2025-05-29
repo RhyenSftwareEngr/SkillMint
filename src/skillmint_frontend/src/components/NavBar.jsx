@@ -1,39 +1,17 @@
 import React from "react";
+import styles from "./NavBar.module.css";
 
 function NavBar() {
   return (
-    <nav style={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      padding: "1rem 2rem",
-      background: "#fff",
-      borderBottom: "1px solid #eee"
-    }}>
-      <div style={{
-        width: 36, height: 36, background: "#444", borderRadius: 8
-      }} />
-      <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+    <nav className={styles.navbar}>
+      <div className={styles.logo} />
+      <div className={styles.actions}>
         <input
           type="text"
           placeholder="Search"
-          style={{
-            padding: "0.5rem 1rem",
-            borderRadius: 20,
-            border: "1px solid #ccc"
-          }}
+          className={styles.searchInput}
         />
-        <button
-          style={{
-            padding: "0.5rem 1.2rem",
-            borderRadius: 20,
-            border: "none",
-            background: "#444",
-            color: "#fff",
-            fontWeight: 600,
-            cursor: "pointer"
-          }}
-        >
+        <button className={styles.loginBtn}>
           Log in
         </button>
       </div>
