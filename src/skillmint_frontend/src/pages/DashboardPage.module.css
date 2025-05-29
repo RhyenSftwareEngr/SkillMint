@@ -1,25 +1,93 @@
 .dashboardRoot {
   display: flex;
+  width: 100vw;
   min-height: 100vh;
+  background: #fafafa;
+}
+
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: #fafafa;
+  border-right: 1px solid #eee;
+  z-index: 2;
+  position: relative;
 }
 
 .mainContent {
   flex: 1;
-  padding: 2rem;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+  background: #fafafa;
   display: flex;
   flex-direction: column;
+}
+
+.avatarBtn {
+  position: absolute;
+  top: 2rem;
+  right: 2.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  padding: 0;
+}
+
+.avatarImg {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #eee;
+  background: #ddd;
+  display: block;
 }
 
 .topBar {
   display: flex;
   align-items: center;
-  margin: 2rem 0;
-  gap: 1rem;
+  gap: 1.5rem;
+  margin: 2rem 2rem 1rem 2rem;
+}
+
+.topBar h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: #eaeaea;
+  border-radius: 20px;
+  padding: 0.2rem;
+}
+
+.tab {
+  padding: 0.5rem 1.5rem;
+  border-radius: 20px;
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.tabActive {
+  background: #444;
+  color: #fff;
+}
+
+.sortDropdown {
+  margin-left: auto;
 }
 
 .eventsGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: 1.5rem;
+  margin: 0 2rem 2rem 2rem;
 }
