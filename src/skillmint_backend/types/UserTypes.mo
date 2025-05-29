@@ -14,4 +14,13 @@ module {
         created_at: Int;
         updated_at: Int;
     };
+
+    public type User = {
+        principal: Principal;
+        info: UserInfo;
+    };
+
+    public type UserStorage = {
+        users: [User];
+    }
 }
