@@ -1,0 +1,17 @@
+.showMoreBtn {
+  margin: 2rem auto 0 auto;
+  display: block;
+  padding: 0.6rem 2rem;
+  border-radius: 20px;
+  border: none;
+  background: #444;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.showMoreBtn:hover {
+  background: #222;
+}

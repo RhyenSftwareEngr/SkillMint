@@ -1,0 +1,13 @@
+.dropdown {
+  margin-left: auto;
+}
+
+.select {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #333;
+  font-size: 1rem;
+  cursor: pointer;
+}

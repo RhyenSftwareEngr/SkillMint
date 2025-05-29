@@ -1,8 +1,12 @@
+import React from "react";
+import PropTypes from "prop-types";
+import styles from "./EventCarousel.module.css";
+
 function EventCarousel({ events }) {
   return (
-    <div className="carousel">
+    <div className={styles.carousel}>
       {events.map((event, index) => (
-        <div key={index} className="carousel-item">
+        <div key={index} className={styles["carousel-item"]}>
           <h3>{event.title}</h3>
           <p>{event.description}</p>
           <span>{new Date(event.date).toLocaleDateString()}</span>
@@ -11,6 +15,7 @@ function EventCarousel({ events }) {
     </div>
   );
 }
+
 EventCarousel.propTypes = {
   events: PropTypes.arrayOf(
     PropTypes.shape({
@@ -20,5 +25,5 @@ EventCarousel.propTypes = {
     })
   ).isRequired,
 };
-import PropTypes from 'prop-types';
+
 export default EventCarousel;

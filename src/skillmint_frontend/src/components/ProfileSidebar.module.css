@@ -1,0 +1,37 @@
+.profileSidebar {
+  width: 260px;
+  background: #fafafa;
+  padding: 2rem 1rem;
+  border-left: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profileCard {
+  text-align: center;
+}
+
+.avatar {
+  width: 72px;
+  height: 72px;
+  background: #ccc;
+  border-radius: 50%;
+  margin: 0 auto 1rem auto;
+}
+
+.name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.badges {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.badge {
+  font-size: 1.5rem;
+}

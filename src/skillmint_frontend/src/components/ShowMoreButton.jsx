@@ -1,24 +1,17 @@
-function ShowMoreButton({ onClick, isLoading }) {
+import React from "react";
+import PropTypes from "prop-types";
+import styles from "./ShowMoreButton.module.css";
+
+function ShowMoreButton({ onClick }) {
   return (
-    <button
-      className="show-more-button"
-      onClick={onClick}
-      disabled={isLoading}
-    >
-      {isLoading ? (
-        <span className="loading-spinner"></span>
-      ) : (
-        "Show More"
-      )}
+    <button className={styles.showMoreBtn} onClick={onClick}>
+      Show More
     </button>
   );
 }
+
 ShowMoreButton.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool,
+  onClick: PropTypes.func,
 };
-ShowMoreButton.defaultProps = {
-  isLoading: false,
-};
-import PropTypes from 'prop-types';
+
 export default ShowMoreButton;

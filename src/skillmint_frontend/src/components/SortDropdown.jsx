@@ -1,29 +1,29 @@
-function SortDropdown({ options, selectedOption, onSelect }) {
+import React from "react";
+import PropTypes from "prop-types";
+import styles from "./SortDropdown.module.css";
+
+function SortDropdown({ options, selected, onChange }) {
   return (
-    <div className="sort-dropdown">
+    <div className={styles.dropdown}>
       <select
-        value={selectedOption}
-        onChange={(e) => onSelect(e.target.value)}
-        className="form-select"
+        className={styles.select}
+        value={selected}
+        onChange={(e) => onChange(e.target.value)}
       >
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
+          <option key={option} value={option}>
+            {option}
           </option>
         ))}
       </select>
     </div>
   );
-}   
+}
+
 SortDropdown.propTypes = {
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  selectedOption: PropTypes.string.isRequired,
-  onSelect: PropTypes.func.isRequired,
-};  
-import PropTypes from 'prop-types';
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+  selected: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
 export default SortDropdown;
