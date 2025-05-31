@@ -2,39 +2,58 @@ import Trie "mo:base/Trie";
 import Principal "mo:base/Principal";
 import Int "mo:base/Int";
 import Nat "mo:base/Nat";
+import Time "mo:base/Time";
 
 module {
-    public type UserInfo = {
+    public type UserProfile = {
         first_name: Text;
         last_name: Text;
         email: Text;
         phone: Text;
         bio: ?Text;
         skills: [Text];
-        social_links: [(Text, Text)];
-        profile_image: ?Text;
-        events_created: [Principal];
-        events_attending: [Principal];
+        social_links: [(Text, Text)]; // (platform, link)
+        profile_image: ?Text; // URL to the profile image
+        events_created: [Event];
+        events_attending: [Event];
         affiliation: [Text];
-        created_at: Int;
-        updated_at: Int;
     };
-    public type EventInfo = {
+    public type UserInfo = {
+        profile: UserProfile;
+        created_at: Time.Time;
+        updated_at: Time.Time;
+    };
+    public type EventProfile = {
         event_name: Text;
         event_description: Text;
-        event_date: Int;
-        event_end_date: ?Int;
-        event_mode: {#Physical; #Virtual; #Hybrid};
+        event_date: Time.Time;
+        event_end_date: Time.Time;
+        event_mode: EventMode;
         event_location: ?Text;
         virtual_link: ?Text;
-        registration_start: Int;
-        registration_end: Int;
+        registration_start: Time.Time;
+        registration_end: Time.Time;
         max_attendees: ?Nat;
         tags: [Text];
         // requirements: ?Text;
         // image_url: ?Text;
-        created_at: Int;
-        updated_at: Int;
+        // event_organizers: [User];
+        // attendees: ?[User];
+        // created_at: Int;
+        // updated_at: Int;
+    };
+    public type EventInfo = {
+        profile: EventProfile; 
+        status: EventStatus;
+        event_organizers: [User];
+        attendees: [User];
+        created_at: Time.Time;
+        updated_at: Time.Time;
+    };
+    public type EventMode={
+        #Physical;
+        #Virtual;
+        #Hybrid;
     };
     public type EventStatus = {
         #Upcoming;
@@ -51,9 +70,6 @@ module {
     public type Event = {
         id: Nat;
         info: EventInfo;
-        status: EventStatus;
-        event_organizers: [User];
-        attendees: ?[User];
     };
 
     public type MainStorage = {
@@ -79,17 +95,39 @@ module {
     };
 
     public let blank_user_info: UserInfo = {
-        first_name = "";
-        last_name = "";
-        email = "";
-        phone = "";
-        bio = null;
-        skills = [];
-        social_links = [];
-        profile_image = null;
-        events_created = [];
-        events_attending = [];
-        affiliation = [];
+        profile = {
+            first_name = "";
+            last_name = "";
+            email = "";
+            phone = "";
+            bio = null;
+            skills = [];
+            social_links = [];
+            profile_image = null;
+            events_created = [];
+            events_attending = [];
+            affiliation = [];
+        };
+        created_at = 0;
+        updated_at = 0;
+    };
+    public let blank_event_info: EventInfo = {
+        profile = {
+            event_name = "";
+            event_description = "";
+            event_date = 0;
+            event_end_date = 0;
+            event_mode = #Physical;
+            event_location = null;
+            virtual_link = null;
+            registration_start = 0;
+            registration_end = 0;
+            max_attendees = null;
+            tags = [];
+        };
+        status = #Cancelled;
+        event_organizers = [];
+        attendees = [];
         created_at = 0;
         updated_at = 0;
     };
