@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function NavBar() {
+export default function NavBar({ onProfileClick }) {
   return (
     <nav className="w-full bg-white shadow-sm px-8 py-3 flex items-center justify-between">
       {/* Left: Logo */}
@@ -32,8 +32,11 @@ export default function NavBar() {
           Join Now
         </button>
         {/* Circle icons as placeholders */}
-        <span className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center ml-1">
-          {/* Profile icon - use Heroicons or Lucide for real */}
+        <button
+          className="ml-2 w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300"
+          onClick={onProfileClick}
+        >
+          {/* Simple user icon (SVG or your favorite icon) */}
           <svg
             className="w-5 h-5 text-gray-600"
             fill="none"
@@ -44,7 +47,7 @@ export default function NavBar() {
             <circle cx="12" cy="8" r="4" />
             <path d="M6 20c0-2.21 3.58-4 6-4s6 1.79 6 4" />
           </svg>
-        </span>
+        </button>
         <span className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
           {/* Search icon */}
           <svg

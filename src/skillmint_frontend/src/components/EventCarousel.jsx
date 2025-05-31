@@ -28,29 +28,29 @@ function EventCarousel() {
       </div>
 
       {/* Events section below */}
-      <div className="flex items-center justify-between mt-6">
-        {/* Section title */}
-        <h2 className="text-lg font-bold ml-2">Events</h2>
+      {/* <div className="flex items-center justify-between mt-6"> */}
+      {/* Section title */}
+      {/* <h2 className="text-lg font-bold ml-2">Events</h2> */}
 
-        {/* Centered tabs */}
-        <div className="flex-1 flex justify-center gap-2">
+      {/* Centered tabs */}
+      {/* <div className="flex-1 flex justify-center gap-2">
           <button className="px-6 py-1 rounded-full bg-gray-400 text-white font-medium shadow">
             All Events
           </button>
           <button className="px-6 py-1 rounded-full bg-gray-200 text-gray-800 font-medium">
             Created Events
           </button>
-        </div>
+        </div> */}
 
-        {/* Sort dropdown right-aligned */}
-        <div>
+      {/* Sort dropdown right-aligned */}
+      {/* <div>
           <select className="px-3 py-1 rounded-full bg-gray-200 text-gray-700 text-sm border-none outline-none">
             <option>Sort</option>
             <option>Latest</option>
             <option>Soonest</option>
           </select>
         </div>
-      </div>
+      </div> */}
     </section>
   );
 }

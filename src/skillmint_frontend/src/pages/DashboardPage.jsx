@@ -1,18 +1,41 @@
 import React from "react";
 import NavBar from "../components/NavBar";
 import EventCarousel from "../components/EventCarousel"; // This is your new top events + filter/tabs bar
+import ProfileDrawer from "../components/ProfileDrawer";
+import EventGridWithTabs from "../components/EventGridWithTabs";
+import { useState } from "react";
 
 export default function Dashboard() {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
       {/* Sticky Navbar */}
-      <NavBar />
+      <NavBar onProfileClick={() => setDrawerOpen(true)} />
 
       {/* Main Content */}
       <div className="flex min-h-screen">
         {/* Sidebar */}
         <aside className="w-80 bg-white shadow-lg rounded-2xl px-6 py-6 flex flex-col gap-6">
           {/* Search bar */}
+          <div className="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-lg mb-2">
+            {/* Magnifying glass icon */}
+            <svg
+              className="w-5 h-5 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              viewBox="0 0 24 24"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Search"
+              className="bg-transparent outline-none flex-1 text-sm"
+            />
+          </div>
 
           {/* Upcoming Events */}
           <div>
@@ -131,35 +154,8 @@ export default function Dashboard() {
           <EventCarousel />
 
           {/* Events Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-10">
-            {Array.from({ length: 12 }).map((_, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-2xl shadow hover:shadow-lg transition flex flex-col"
-              >
-                <div className="h-28 bg-gray-200 rounded-t-2xl"></div>
-                {/* Event details */}
-                <div className="p-4 flex flex-col flex-1">
-                  <div className="text-xs text-gray-400 mb-1 flex items-center justify-between">
-                    <span>Open • Ongoing</span>
-                    <span className="text-xs text-gray-400">12 days left</span>
-                  </div>
-                  <div className="font-semibold text-sm text-gray-900 truncate mb-1">
-                    Hackathon – Philippine Blockchain Week 2025
-                  </div>
-                  <div className="text-xs text-gray-500 mb-2">
-                    June 6-9, 2025 &bull; SMX Manila
-                  </div>
-                  <div className="flex items-center gap-2 mt-auto">
-                    <span className="text-xs bg-blue-100 text-blue-700 rounded px-2 py-0.5">
-                      Badge
-                    </span>
-                    {/* Add icon here if you like */}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          {/* REPLACE YOUR OLD GRID WITH THIS: */}
+          <EventGridWithTabs />
 
           {/* Show More Button */}
           <div className="flex justify-center my-8">
@@ -167,6 +163,10 @@ export default function Dashboard() {
               Show More
             </button>
           </div>
+          <ProfileDrawer
+            open={drawerOpen}
+            onClose={() => setDrawerOpen(false)}
+          />
         </main>
       </div>
 
