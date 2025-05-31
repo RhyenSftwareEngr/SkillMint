@@ -1,52 +1,63 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 export default function NavBar() {
   return (
-    <nav className="bg-white/80 backdrop-blur shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-3 flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
-          {/* You can replace this with your logo image */}
-          <span className="text-xl font-bold text-blue-700 tracking-tight">
-            SkillMint
-          </span>
-        </Link>
-        {/* Links */}
-        <div className="hidden md:flex gap-6 items-center">
-          <Link to="/events" className="text-gray-700 hover:text-blue-600 transition">
-            Events
-          </Link>
-          <Link to="/scope" className="text-gray-700 hover:text-blue-600 transition">
-            Scope
-          </Link>
-          <Link to="/about" className="text-gray-700 hover:text-blue-600 transition">
-            About
-          </Link>
-          <Link to="/contact" className="text-gray-700 hover:text-blue-600 transition">
-            Contact
-          </Link>
-        </div>
-        {/* CTA Button */}
-        <div className="hidden md:block">
-          <Link
-            to="/signup"
-            className="px-5 py-2 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition"
+    <nav className="w-full bg-white shadow-sm px-8 py-3 flex items-center justify-between">
+      {/* Left: Logo */}
+      <div className="flex items-center">
+        <span className="text-xl font-bold text-blue-700 tracking-tight">
+          SkillMint
+        </span>
+      </div>
+
+      {/* Middle: Nav Links */}
+      {/* <div className="flex gap-8 ml-12">
+        <a href="#" className="text-gray-700 hover:text-blue-600">
+          Events
+        </a>
+        <a href="#" className="text-gray-700 hover:text-blue-600">
+          Scope
+        </a>
+        <a href="#" className="text-gray-700 hover:text-blue-600">
+          About
+        </a>
+        <a href="#" className="text-gray-700 hover:text-blue-600">
+          Contact
+        </a>
+      </div> */}
+
+      {/* Right: CTA + Icons */}
+      <div className="flex items-center gap-3">
+        <button className="px-5 py-2 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700">
+          Join Now
+        </button>
+        {/* Circle icons as placeholders */}
+        <span className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center ml-1">
+          {/* Profile icon - use Heroicons or Lucide for real */}
+          <svg
+            className="w-5 h-5 text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            viewBox="0 0 24 24"
           >
-            Join Now
-          </Link>
-        </div>
-        {/* Mobile Menu Button (optional, basic placeholder) */}
-        <div className="md:hidden">
-          <button className="p-2 rounded hover:bg-gray-100">
-            {/* Hamburger icon */}
-            <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" strokeWidth="2"
-              viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round"
-                d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-        </div>
+            <circle cx="12" cy="8" r="4" />
+            <path d="M6 20c0-2.21 3.58-4 6-4s6 1.79 6 4" />
+          </svg>
+        </span>
+        <span className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+          {/* Search icon */}
+          <svg
+            className="w-5 h-5 text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            viewBox="0 0 24 24"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+          </svg>
+        </span>
       </div>
     </nav>
   );
