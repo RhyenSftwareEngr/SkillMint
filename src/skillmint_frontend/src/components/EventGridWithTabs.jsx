@@ -59,12 +59,12 @@ export default function EventGridWithTabs() {
   const displayedCreatedEvents = createdEvents;
 
   return (
-    // Center and limit width
-    <div className="w-full max-w-6xl mx-auto">
+    // Responsive container: horizontal padding and no overflow
+    <div className="w-full max-w-6xl mx-auto px-2 sm:px-4 overflow-x-hidden">
       {/* Header, Tabs, Sort */}
-      <div className="flex items-center justify-between mb-6 mt-8">
+      <div className="flex items-center justify-between mb-3 mt-">
         <h2 className="text-2xl font-bold">Events</h2>
-        <div className="flex items-center gap-3">
+        <div className="w-full flex justify-center">
           <div className="flex bg-gray-200 rounded-full p-1">
             <button
               onClick={() => setActiveTab("all")}
@@ -87,16 +87,16 @@ export default function EventGridWithTabs() {
               Created Events
             </button>
           </div>
-          <select
-            className="ml-2 px-3 py-1 rounded-full bg-gray-200 border-none text-sm focus:ring-0"
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-          >
-            <option value="latest">Sort</option>
-            <option value="latest">Latest</option>
-            <option value="soonest">Soonest</option>
-          </select>
         </div>
+        <select
+          className="ml-2 px-3 py-1 rounded-full bg-gray-200 border-none text-sm focus:ring-0"
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+        >
+          <option value="latest">Sort</option>
+          <option value="latest">Latest</option>
+          <option value="soonest">Soonest</option>
+        </select>
       </div>
 
       {/* Event Grid */}
@@ -135,7 +135,7 @@ function EventCard({ event }) {
   return (
     <div className="bg-white rounded-xl shadow p-4 flex flex-col justify-end min-h-[240px] hover:shadow-lg transition">
       <div className="h-24 bg-gray-200 rounded mb-2"></div>
-      <div className="flex gap-2 text-xs mb-1">
+      <div className="flex gap-2 text-xs mb-1 flex-wrap">
         {event.tags?.map((tag, i) => (
           <span key={i} className="bg-gray-200 rounded px-2 py-0.5">
             {tag}

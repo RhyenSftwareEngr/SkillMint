@@ -1,27 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import NavBar from "../components/NavBar";
-import EventCarousel from "../components/EventCarousel"; // This is your new top events + filter/tabs bar
+import EventCarousel from "../components/EventCarousel";
 import ProfileDrawer from "../components/ProfileDrawer";
 import EventGridWithTabs from "../components/EventGridWithTabs";
-import { useState } from "react";
 
-export default function Dashboard() {
+export default function DashboardPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
-    <div className="bg-gray-50 min-h-screen flex flex-col">
-      {/* Sticky Navbar */}
-      <NavBar onProfileClick={() => setDrawerOpen(true)} />
+    <div className="bg-[#E8E8E8] min-h-screen flex flex-col font-sans">
+      {/* NAVBAR: stick to your wireframe! */}
+      <nav className="w-full h-10 bg-[#393939] flex items-center px-3">
+        <div className="w-6 h-6 rounded bg-gray-200 mr-2" />
+        <span className="text-white font-bold tracking-wide text-lg">
+          SkillMint
+        </span>
+        {/* Profile Circle, right */}
+        <div
+          className="ml-auto w-7 h-7 rounded-full bg-gray-400 flex items-center justify-center cursor-pointer"
+          onClick={() => setDrawerOpen(true)}
+        ></div>
+      </nav>
 
-      {/* Main Content */}
-      <div className="flex min-h-screen">
-        {/* Sidebar */}
-        <aside className="w-80 bg-white shadow-lg rounded-2xl px-6 py-6 flex flex-col gap-6">
-          {/* Search bar */}
-          <div className="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-lg mb-2">
-            {/* Magnifying glass icon */}
+      {/* LAYOUT BODY */}
+      <div className="flex flex-1 pt-6 px-4 gap-5">
+        {/* --- SIDEBAR --- */}
+        <aside className="w-80 min-w-[180px] max-w-xs sm:w-64 sm:min-w-[140px] px-2 py-3 ...">
+          {/* SEARCH */}
+
+          {/* Upcoming Events */}
+          <h3 className="font-bold text-[17px] mb-2 mt-1">
+            My Upcoming Events
+          </h3>
+          <div className="flex items-center bg-gray-100 rounded h-7 px-2 mb-3">
             <svg
-              className="w-5 h-5 text-gray-400"
+              className="w-4 h-4 text-gray-400 mr-2"
               fill="none"
               stroke="currentColor"
               strokeWidth={2}
@@ -33,146 +46,83 @@ export default function Dashboard() {
             <input
               type="text"
               placeholder="Search"
-              className="bg-transparent outline-none flex-1 text-sm"
+              className="bg-transparent outline-none flex-1 text-xs"
             />
           </div>
-
-          {/* Upcoming Events */}
-          <div>
-            <h3 className="font-bold text-lg mb-4">My Upcoming Events</h3>
-            <ul>
-              {[
-                {
-                  day: 6,
-                  month: "June",
-                  title: "Hackathon – Philippine Blockchain Week 2025",
-                  time: "8:00AM - 8:00PM",
-                  location: "SMX Manila",
-                },
-                {
-                  day: 7,
-                  month: "June",
-                  title: "Hackathon – Philippine Blockchain Week 2025",
-                  time: "8:00AM - 8:00PM",
-                  location: "SMX Manila",
-                },
-                {
-                  day: 8,
-                  month: "June",
-                  title: "Hackathon – Philippine Blockchain Week 2025",
-                  time: "8:00AM - 8:00PM",
-                  location: "SMX Manila",
-                },
-                {
-                  day: 9,
-                  month: "June",
-                  title: "Hackathon – Philippine Blockchain Week 2025",
-                  time: "8:00AM - 8:00PM",
-                  location: "SMX Manila",
-                },
-              ].map((event, i, arr) => (
-                <li
-                  key={i}
-                  className={`mb-3 ${
-                    i !== arr.length - 1 ? "pb-3 border-b border-gray-200" : ""
-                  }`}
-                >
-                  <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-2 py-2">
-                    <div className="w-10 flex flex-col items-center justify-center bg-white rounded-md mr-2 py-1 shadow">
-                      <span className="text-xl font-bold text-gray-800 leading-5">
-                        {event.day}
-                      </span>
-                      <span className="text-[10px] font-medium text-gray-500 uppercase tracking-wide">
-                        {event.month}
-                      </span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-semibold text-sm text-gray-900 truncate">
-                        {event.title}
-                      </div>
-                      <div className="text-xs text-gray-500">{event.time}</div>
-                      <div className="text-xs text-gray-400">
-                        {event.location}
-                      </div>
-                    </div>
+          <ul className="space-y-2 mb-2">
+            {[6, 7, 8, 9].map((d, idx) => (
+              <li
+                key={idx}
+                className="bg-[#F4F4F4] border border-[#C6C6C6] rounded flex items-center px-2 py-2"
+              >
+                <div className="w-10 text-center border-r border-gray-300 pr-2 flex flex-col items-center">
+                  <span className="block font-bold text-[20px] leading-none">
+                    {d}
+                  </span>
+                  <span className="text-[11px] uppercase text-gray-500 leading-none mt-[1px]">
+                    June
+                  </span>
+                </div>
+                <div className="pl-2 flex-1 text-[12px] max-w-[230px]">
+                  <div className="font-semibold leading-snug break-words whitespace-normal">
+                    Hackathon – Philippine Blockchain Week 2025
                   </div>
-                </li>
-              ))}
-              <li className="mt-1 text-right">
-                <button className="text-xs text-blue-600 hover:underline">
-                  Show All
-                </button>
+                  <div className="text-gray-500 text-[10px]">
+                    May 26, 2025 – June 09, 2025 | 5:00PM - 8:00PM
+                  </div>
+                </div>
               </li>
-            </ul>
+            ))}
+          </ul>
+          <div className="text-right mb-3">
+            <button className="text-xs text-[#393939] underline">
+              Show All
+            </button>
           </div>
-
           {/* Calendar */}
-          <div className="bg-gray-50 shadow rounded-2xl p-4 mt-2">
-            <div className="flex justify-between items-center mb-2">
-              <span className="font-bold">May 2025</span>
+          <div className="bg-[#F4F4F4] rounded p-3 mt-2 border border-gray-200">
+            <div className="flex justify-between items-center mb-1 text-xs">
+              <span className="font-semibold">May 2025</span>
               <div>
-                <button className="text-xs p-1 rounded hover:bg-gray-200">
-                  &#60;
-                </button>
-                <button className="text-xs p-1 rounded hover:bg-gray-200">
-                  &#62;
-                </button>
+                <button className="px-2 text-gray-700">&lt;</button>
+                <button className="px-2 text-gray-700">&gt;</button>
               </div>
             </div>
-            {/* Calendar grid */}
-            <div className="grid grid-cols-7 gap-1 text-center text-xs text-gray-500 mb-2">
+            <div className="grid grid-cols-7 text-center text-[11px] text-gray-500 mb-1">
               {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-                <div key={d} className="font-semibold text-[11px]">
-                  {d}
-                </div>
+                <span key={d}>{d}</span>
               ))}
-              {Array.from({
-                length: 31 + 3,
-              }) /* 3 = days before start of month for May 2025 (starts Wed) */
-                .map((_, i) =>
-                  i < 3 ? (
-                    <div key={i}></div>
-                  ) : (
-                    <div
-                      key={i}
-                      className="py-1 rounded hover:bg-blue-100 hover:text-blue-600 cursor-pointer"
-                    >
-                      {i - 2}
-                    </div>
-                  )
-                )}
             </div>
-            <button className="mt-2 w-full text-xs text-blue-600 hover:underline">
+            <div className="grid grid-cols-7 text-center text-xs">
+              {Array.from({ length: 35 }).map((_, i) => (
+                <span key={i} className="py-0.5">
+                  {i > 1 ? i - 1 : ""}
+                </span>
+              ))}
+            </div>
+            <button className="w-full text-xs text-[#393939] underline mt-2 text-right block">
               Show Calendar
             </button>
           </div>
         </aside>
 
-        {/* Main Dashboard */}
-        <main className="flex-1 px-8 py-6">
-          {/* 🚀 Replace top event row and filter bar with carousel */}
+        {/* --- MAIN CONTENT --- */}
+        <main className="flex-1 flex flex-col min-w-0 gap-5">
+          {/* Carousel */}
           <EventCarousel />
-
-          {/* Events Grid */}
-          {/* REPLACE YOUR OLD GRID WITH THIS: */}
           <EventGridWithTabs />
-
-          {/* Show More Button */}
-          <div className="flex justify-center my-8">
-            <button className="px-6 py-2 bg-gray-700 text-white rounded-full font-semibold hover:bg-gray-800 transition">
-              Show More
-            </button>
-          </div>
-          <ProfileDrawer
-            open={drawerOpen}
-            onClose={() => setDrawerOpen(false)}
-          />
         </main>
+
+        {/* --- PROFILE DRAWER --- */}
+        <ProfileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-100 py-4 text-center text-sm mt-auto">
-        &copy; 2025 SkillMint, all rights reserved.
+      {/* FOOTER */}
+      <div>
+        <h1>spaceee</h1>
+      </div>
+      <footer className="w-full bg-[#393939] text-white py-2 text-center text-xs mt-auto">
+        © 2025 SkillMint. All rights reserved.
       </footer>
     </div>
   );

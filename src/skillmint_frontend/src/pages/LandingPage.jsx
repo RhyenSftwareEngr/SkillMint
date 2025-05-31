@@ -1,5 +1,5 @@
 import React from "react";
-import NavBar from "../components/NavBar";
+import NavBarLandingPage from "../components/NavBarLandingPage";
 
 const abstractBlocks = (
   <div className="flex flex-wrap gap-2 justify-end items-start mt-4">
@@ -15,7 +15,7 @@ const abstractBlocks = (
 export default function LandingPage() {
   return (
     <div className="font-sans bg-gradient-to-b from-gray-100 to-white min-h-screen flex flex-col">
-       <NavBar />
+      <NavBarLandingPage />
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-sky-100 to-blue-100 py-20 flex flex-col items-center relative">
         <div className="absolute inset-0 opacity-30 bg-[url('/grid.svg')] bg-repeat pointer-events-none" />
@@ -26,7 +26,9 @@ export default function LandingPage() {
           Unleash Verified Talent
         </p>
         <p className="max-w-xl mx-auto text-center text-gray-600 z-10">
-          Build your verified tech profile. Earn badges, join events, and connect with future employers—all on a secure, blockchain-based platform.
+          Build your verified tech profile. Earn badges, join events, and
+          connect with future employers—all on a secure, blockchain-based
+          platform.
         </p>
         <button className="mt-8 px-8 py-3 rounded-full bg-blue-600 text-white text-lg font-semibold shadow hover:bg-blue-700 transition z-10">
           Get Started
@@ -48,9 +50,11 @@ export default function LandingPage() {
             Where Skills Meet Opportunity
           </h2>
           <p className="text-gray-600 mb-6">
-            SkillMint connects students and professionals with real-world tech opportunities.
-            Showcase your abilities with verifiable badges, participate in curated events, and join a community that values true skill.
-            Whether you’re seeking internships, hackathons, or your dream job—SkillMint helps you stand out, everywhere.
+            SkillMint connects students and professionals with real-world tech
+            opportunities. Showcase your abilities with verifiable badges,
+            participate in curated events, and join a community that values true
+            skill. Whether you’re seeking internships, hackathons, or your dream
+            job—SkillMint helps you stand out, everywhere.
           </p>
           <button className="px-6 py-2 bg-gray-800 text-white rounded-full font-medium hover:bg-gray-900 transition">
             Learn More
@@ -66,7 +70,10 @@ export default function LandingPage() {
         </h2>
         <div className="relative z-10 flex justify-center gap-6 mt-24">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="w-40 h-40 rounded-2xl bg-white shadow-lg flex flex-col items-center justify-end p-4">
+            <div
+              key={i}
+              className="w-40 h-40 rounded-2xl bg-white shadow-lg flex flex-col items-center justify-end p-4"
+            >
               <div className="w-full h-3/5 bg-gray-200 rounded mb-4"></div>
               <div className="w-3/4 h-4 bg-gray-300 rounded mb-1"></div>
               <div className="w-1/2 h-4 bg-gray-100 rounded"></div>
@@ -82,7 +89,10 @@ export default function LandingPage() {
         </h2>
         <div className="relative z-10 flex gap-6 justify-center mt-24">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="w-72 h-48 bg-white rounded-xl shadow-md flex flex-col justify-end p-4">
+            <div
+              key={i}
+              className="w-72 h-48 bg-white rounded-xl shadow-md flex flex-col justify-end p-4"
+            >
               <div className="w-full h-3/4 bg-gray-200 rounded mb-3"></div>
               <div className="w-1/2 h-4 bg-gray-300 rounded"></div>
             </div>
@@ -102,7 +112,8 @@ export default function LandingPage() {
           Begin Building Your Verified Future
         </h3>
         <p className="mb-6 text-gray-600">
-          Join a thriving community of learners, builders, and employers. Start your journey today!
+          Join a thriving community of learners, builders, and employers. Start
+          your journey today!
         </p>
         <button className="px-8 py-3 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition">
           Create Your Profile
@@ -112,7 +123,9 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-100 py-8 text-center mt-auto">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <span className="text-sm">&copy; 2025 SkillMint. All rights reserved.</span>
+          <span className="text-sm">
+            &copy; 2025 SkillMint. All rights reserved.
+          </span>
           <div className="flex gap-4">
             {/* Replace with links */}
             <span className="hover:underline cursor-pointer">About</span>

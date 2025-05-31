@@ -6,13 +6,16 @@ import DashboardPage from "./pages/DashboardPage";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        {/* Add more routes as needed */}
-      </Routes>
-    </Router>
+    // Main wrapper: disables accidental horizontal scroll, makes layout clean
+    <div className="w-full min-h-screen overflow-x-hidden">
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          {/* Add more routes as needed */}
+        </Routes>
+      </Router>
+    </div>
   );
 }
 
