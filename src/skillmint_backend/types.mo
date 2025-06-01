@@ -20,6 +20,7 @@ module {
         last_name: Text;
         email: Text;
         phone: Text;
+        location: ?Location;
         bio: ?Text;
         skills: [Text];
         social_links: [{platform:Text;url:Text}]; // (platform, link)
@@ -28,19 +29,20 @@ module {
     };
     public type UserInfo = {
         profile: UserProfile;
-        badges: [(Badge,Event)]; // List of badges earned by the user
-        events_created: [Event];
-        events_attending: [Event];
+        badges: [{badge:Badge;event_id:Nat}]; // List of badges earned by the user
+        events_created: [Nat];  //List of Event IDs
+        events_attending: [Nat];    //List of Event IDs
         created_at: Time.Time;
         updated_at: Time.Time;
     };
     public type EventProfile = {
         event_name: Text;
         event_description: Text;
+        event_detail: Text;
         event_date: Time.Time;
         event_end_date: Time.Time;
         event_mode: EventMode;
-        event_location: ?Text;
+        event_location: ?Location;
         virtual_link: ?Text;
         registration_start: Time.Time;
         registration_end: Time.Time;
@@ -49,18 +51,18 @@ module {
         badge: Badge;
         // requirements: ?Text;
         // image_url: ?Text;
-        // event_organizers: [User];
-        // attendees: ?[User];
-        // created_at: Int;
-        // updated_at: Int;
     };
     public type EventInfo = {
         profile: EventProfile; 
         status: EventStatus;
-        event_organizers: [User];
-        attendees: [User];
+        event_organizers: [Principal];  //List of Users
+        attendees: [Attendee]; //LIst of Users and the time they joined
         created_at: Time.Time;
         updated_at: Time.Time;
+    };
+    public type Attendee = {
+        attendee_principal:Principal;
+        attendee_registration_date:Time.Time;
     };
     public type EventMode={
         #Physical;
@@ -79,6 +81,16 @@ module {
         image_url: ?Text; // URL to the badge image
     };
 
+    public type Location = {
+        establishment: ?Text;
+        bldg: ?Text;
+        street: ?Text;
+        brgy: ?Text;
+        zipcode: ?Text;
+        city: Text;
+        country: Text;
+    };
+
     public type User = {
         principal: Principal;
         info: UserInfo;
@@ -88,6 +100,15 @@ module {
         id: Nat;
         info: EventInfo;
     };
+
+    // public type FileChunk = {
+    //     chunk: Blob;
+    //     index: Nat;
+    // };
+    // public type File = {
+    //     name: Text;
+    //     chunk: [FileChunk]
+    // };
 
     public type MainStorage = {
         users: [User];
@@ -122,6 +143,7 @@ module {
             social_links = [];
             profile_image = null;
             affiliation = [];
+            location = null;
         };
         badges = [];
         events_created = [];
@@ -133,6 +155,7 @@ module {
         profile = {
             event_name = "";
             event_description = "";
+            event_detail = "";
             event_date = 0;
             event_end_date = 0;
             event_mode = #Physical;

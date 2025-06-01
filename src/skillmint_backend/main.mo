@@ -13,7 +13,7 @@ shared actor class Main(init: Types.MainStorage) = Self {
     ****************************/
     stable var users = Types.users_fromArray(init.users);
     stable var events = Types.events_fromArray(init.events);
-    stable var next_event_id: Nat = 0;
+    stable var next_event_id: Nat = 1; //Lets start with 1. 0 being the error type
 
     func user_get(id: Principal) : ?Types.UserInfo = Trie.get(users, Types.user_key(id), Principal.equal);
     func user_put(id : Principal, info: Types.UserInfo){
@@ -25,17 +25,17 @@ shared actor class Main(init: Types.MainStorage) = Self {
         events := Trie.put(events, Types.event_key(id), Nat.equal, info).0;
     };
 
-    func user_event_update(event_id:Nat, user_principal:Principal,method:{#leave;#join;}): [Types.Event] {
+    func user_event_update(event_id:Nat, user_principal:Principal,method:{#leave;#join;}): [Nat] {
         let user = user_get(user_principal);
         switch(user){
             case (?user_info) {
                 // Update the user's events_attending list based on the method
                 let updated_events = switch (method) {
                     case (#join) {
-                        Array.append<Types.Event>(user_info.events_attending, [{id=event_id; info=Option.get(event_get(event_id), Types.blank_event_info)}]);
+                        Array.append<Nat>(user_info.events_attending, [event_id]);
                     };
                     case (#leave) {
-                        Array.filter<Types.Event>(user_info.events_attending, func(e:Types.Event) : Bool = e.id != event_id);
+                        Array.filter<Nat>(user_info.events_attending, func(e:Nat) : Bool = e != event_id);
                     };
                 };
                 return updated_events;
@@ -67,9 +67,9 @@ shared actor class Main(init: Types.MainStorage) = Self {
 
         let user_info = {
             profile:Types.UserProfile = profile;
-            badges:[(Types.Badge,Types.Event)] = []; // Initialize with an empty list of badges
-            events_created:[Types.Event] = []; // Initialize with an empty list of created events
-            events_attending:[Types.Event] = []; // Initialize with an empty list of events the user is attending
+            badges:[{badge:Types.Badge;event_id:Nat}] = []; // Initialize with an empty list of badges
+            events_created:[Nat] = []; // Initialize with an empty list of created events
+            events_attending:[Nat] = []; // Initialize with an empty list of events the user is attending
             created_at:Time.Time = current_time;
             updated_at:Time.Time = current_time;
         };
@@ -183,20 +183,20 @@ shared actor class Main(init: Types.MainStorage) = Self {
         switch (event_get(id)) {
             case (?event_info) {
                 // Check if the user is already an attendee
-                if (Option.isSome(Array.find(event_info.attendees, func(u:Types.User) : Bool = u.principal == caller))){
+                if (Option.isSome(Array.find(event_info.attendees, func(u:Types.Attendee) : Bool = u.attendee_principal == caller))){
                     return ?("Already joined");
                 };
 
                 // Add the user to the attendees list
-                let caller_user:Types.User = {
-                    principal = caller;
-                    info = Option.get(user_get(caller), Types.blank_user_info);
-                };
+                // let caller_user:Types.User = {
+                //     principal = caller;
+                //     info = Option.get(user_get(caller), Types.blank_user_info);
+                // };
                 let updated_event_info = {
                     profile = event_info.profile;
                     status = event_info.status; // Keep the existing status
                     event_organizers = event_info.event_organizers; // Keep existing organizers
-                    attendees = Array.append<Types.User>(event_info.attendees, [caller_user]); // Add the caller to attendees
+                    attendees = Array.append<Types.Attendee>(event_info.attendees, [{attendee_principal = caller; attendee_registration_date = Time.now();}]); // Add the caller to attendees
                     created_at = event_info.created_at; // Keep the existing creation time
                     updated_at = event_info.updated_at; // Update the modification time
                 };
@@ -232,13 +232,13 @@ shared actor class Main(init: Types.MainStorage) = Self {
         switch (event_get(id)) {
             case (?event_info) {
                 // Check if the user is an attendee
-                if (Option.isSome(Array.find(event_info.attendees, func(u:Types.User) : Bool = u.principal == caller))){
+                if (Option.isSome(Array.find(event_info.attendees, func(u:Types.Attendee) : Bool = u.attendee_principal == caller))){
                     // Remove the user from the attendees list
                     // let caller_user:Types.User = {
                     //     principal = caller;
                     //     info = Option.get(user_get(caller), Types.blank_user_info);
                     // };
-                    let updated_attendees = Array.filter<Types.User>(event_info.attendees, func(u:Types.User) : Bool = u.principal != caller);
+                    let updated_attendees = Array.filter<Types.Attendee>(event_info.attendees, func(u:Types.Attendee) : Bool = u.attendee_principal != caller);
                     let updated_event_info = {
                         profile = event_info.profile;
                         status = event_info.status; // Keep the existing status
@@ -289,17 +289,13 @@ shared actor class Main(init: Types.MainStorage) = Self {
     public shared({caller}) func submitEvent(payload: Types.EventProfile) : async Nat {
         let event_id = next_event_id;
         next_event_id += 1;
-        let caller_user:Types.User = {
-            principal = caller;
-            info = Option.get(user_get(caller), Types.blank_user_info);
-        };
 
         let event_info = {
             // id = event_id;
             profile = payload:Types.EventProfile;
             status = #Upcoming : Types.EventStatus; // Default status
-            event_organizers = [caller_user];
-            attendees = []:[Types.User];
+            event_organizers = [caller];
+            attendees = []:[Types.Attendee];
             created_at = Time.now();
             updated_at = Time.now();
         };
@@ -309,7 +305,7 @@ shared actor class Main(init: Types.MainStorage) = Self {
         let user_att = user_get(caller);
         switch(user_att) {
             case (?user_info) {
-                let updated_events = Array.append<Types.Event>(user_info.events_created, [{id=event_id; info=event_info}]);
+                let updated_events = Array.append<Nat>(user_info.events_created, [event_id]);
                 // Update the user's events_created list
                 let updated_user_info = {
                     profile = user_info.profile;
@@ -330,7 +326,7 @@ shared actor class Main(init: Types.MainStorage) = Self {
         return event_id;
     };
 
-    public func finalizeEvent(id: Nat, attended_attendees: [Types.User]) : async ?Text {
+    public func finalizeEvent(id: Nat, attended_attendees: [Principal]) : async ?Text {
         switch (event_get(id)) {
             case (?event_info) {
                 // Update the event status to Completed
@@ -351,21 +347,22 @@ shared actor class Main(init: Types.MainStorage) = Self {
 
                     // Check if the user is in the attended attendees list
                     // and issue a badge if they are
-                    let attended_opt = Array.find(attended_attendees, func(u:Types.User) : Bool = u.principal == att.principal);
+                    let attended_opt = Array.find(attended_attendees, func(u:Principal) : Bool = u == att.attendee_principal);
                     if (Option.isSome(attended_opt)) {
                         // Assuming you have a function to issue badges
                         // issue_badge(att.principal, id, user_att);
-                        let user_att = user_get(att.principal);
+                        let user_att = user_get(att.attendee_principal);
                         switch(user_att){
                             case(?user_info) {
-                                let updated_badges = Array.append<(Types.Badge,Types.Event)>(user_info.badges, [
-                                    (event_info.profile.badge,
-                                    {id=id;
-                                    info=event_info}
-                                )]);
-                                let updated_events = user_event_update(id, att.principal, #leave);
+                                let updated_badges = Array.append<{badge:Types.Badge;event_id:Nat}>(user_info.badges, [
+                                    {
+                                        badge=event_info.profile.badge;
+                                        event_id=id;
+                                    }
+                                ]);
+                                let updated_events = user_event_update(id, att.attendee_principal, #leave);
                                 if (Array.size(updated_events) == 0) {
-                                    list_of_failed_attendees := list_of_failed_attendees # "- " # Principal.toText(att.principal) # " (No events left to attend)\n";
+                                    list_of_failed_attendees := list_of_failed_attendees # "- " # Principal.toText(att.attendee_principal) # " (No events left to attend)\n";
                                     continue attendees_loop; // Skip to the next attendee
                                 };
                                 // Update the user's badges and events_attending list
@@ -378,10 +375,10 @@ shared actor class Main(init: Types.MainStorage) = Self {
                                     created_at = user_info.created_at;
                                     updated_at = Time.now();
                                 };
-                                user_put(att.principal, updated_user_info);
+                                user_put(att.attendee_principal, updated_user_info);
                             };
                             case null {
-                                list_of_failed_attendees := list_of_failed_attendees # "- " #Principal.toText(att.principal) # "\n";
+                                list_of_failed_attendees := list_of_failed_attendees # "- " #Principal.toText(att.attendee_principal) # "\n";
                             };
                         };
                     };
