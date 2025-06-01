@@ -14,14 +14,13 @@ export default function ProfileDrawer({ open, onClose }) {
         }`}
         onClick={onClose}
       />
-
       {/* Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full w-[400px] max-w-full bg-white shadow-xl z-50 transition-transform duration-300 ${
+        className={`fixed top-0 right-0 h-full bg-white shadow-xl z-50 transition-transform duration-300 ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
+        style={{ width: 400, maxWidth: "100vw" }}
       >
-        {/* Drawer Header */}
         <div className="flex justify-between items-center p-4 border-b">
           <h2 className="font-bold text-lg">
             {editMode ? "Edit Profile" : "Profile"}
@@ -33,7 +32,6 @@ export default function ProfileDrawer({ open, onClose }) {
             &times;
           </button>
         </div>
-
         <div className="p-6">
           {editMode ? (
             <ProfileEditForm onCancel={() => setEditMode(false)} />
@@ -49,7 +47,6 @@ export default function ProfileDrawer({ open, onClose }) {
 function ProfileView({ onEdit }) {
   return (
     <div className="flex flex-col items-center">
-      {/* Profile pic */}
       <div className="w-24 h-24 rounded-full bg-gray-200 mb-4" />
       <button
         className="ml-auto mb-2 px-3 py-1 rounded-full border bg-gray-100 hover:bg-gray-200 text-xs self-end"
@@ -70,9 +67,7 @@ function ProfileView({ onEdit }) {
         <div className="flex items-center gap-2 text-gray-700">
           <span>🔗</span> github.com/excel_tahe
         </div>
-        {/* Add more links/icons as needed */}
       </div>
-      {/* Badges */}
       <div className="w-full">
         <div className="font-semibold text-sm mb-2 flex justify-between">
           <span>Badges</span>
@@ -86,7 +81,6 @@ function ProfileView({ onEdit }) {
               key={i}
               className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center"
             >
-              {/* Replace with badge SVG/icon */}
               <span className="text-lg">🏅</span>
             </div>
           ))}
@@ -99,7 +93,6 @@ function ProfileView({ onEdit }) {
 function ProfileEditForm({ onCancel }) {
   return (
     <form className="space-y-4">
-      {/* Cover photo and profile pic row */}
       <div className="flex flex-col items-center relative mb-4">
         <div className="w-24 h-24 rounded-full bg-gray-200 mb-2" />
         <button

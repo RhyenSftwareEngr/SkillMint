@@ -1,29 +1,19 @@
 import React from "react";
-import styles from "./EventCard.module.css";
 
-function EventCard({ event }) {
+export default function EventCard() {
   return (
-    <div className={styles.card}>
-      <div className={styles.cardImage} />
-      <div className={styles.cardContent}>
-        <div className={styles.cardMeta}>
-          {event.tags && event.tags.map((tag, idx) => (
-            <span key={idx} className={styles.tag}>{tag}</span>
-          ))}
-          {event.daysLeft !== undefined && (
-            <span className={styles.daysLeft}>{event.daysLeft} days left</span>
-          )}
-        </div>
-        <div className={styles.cardTitle}>{event.title} – {event.description}</div>
-        <div className={styles.date}>
-          {event.date}
-        </div>
-        {event.badge && (
-          <div className={styles.badge}>{event.badge}</div>
-        )}
+    <div className="bg-white rounded-xl shadow p-4 flex flex-col min-h-[210px] hover:shadow-lg transition">
+      <div className="h-20 bg-gray-200 rounded mb-2"></div>
+      <div className="flex gap-2 text-xs mb-1 flex-wrap">
+        <span className="bg-gray-200 rounded px-2 py-0.5">Virtual</span>
+        <span className="bg-gray-200 rounded px-2 py-0.5">Upcoming</span>
+        <span className="text-gray-400">12 days left</span>
       </div>
+      <div className="font-semibold text-sm truncate">
+        Hackathon – Philippine Blockchain Week 2025
+      </div>
+      <div className="text-xs text-gray-500">May 26, 2025 – June 09, 2025</div>
+      <div className="mt-1 text-xs">Badge</div>
     </div>
   );
 }
-
-export default EventCard;
