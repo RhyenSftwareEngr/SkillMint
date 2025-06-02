@@ -5,6 +5,7 @@ import Nat "mo:base/Nat";
 import Option "mo:base/Option";
 import Time "mo:base/Time";
 import Array "mo:base/Array";
+import LLM "mo:llm";
 
 shared actor class Main(init: Types.MainStorage) = Self {
 
@@ -411,6 +412,21 @@ shared actor class Main(init: Types.MainStorage) = Self {
                 return null
             };
         };
+    };
+
+    /////////////////////////////////////////////////////////////
+    
+    public func prompt(user_msg:Text): async Text{
+        let response = await LLM.chat(#Llama3_1_8B)
+        .withMessages([
+            #system_ {
+                content = "You are a helpful assitant.";
+            },
+            #user {
+                content = user_msg;
+            },
+        ]).send();
+       return Option.get(response.message.content,"No response");
     };
     
     // public func addOrganizer(id: Nat, organizer: Principal):async ?[Types.User]{
