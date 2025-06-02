@@ -1,8 +1,29 @@
 import React from "react";
 
-export default function EventsGrid() {
+export default function MainContent() {
   return (
-    <div className="w-full">
+    <main className="flex-1 flex flex-col min-w-0">
+      {/* Carousel */}
+      <div className="w-full mb-8 relative min-h-[184px]">
+        <div className="flex items-center gap-3 relative">
+          <button className="w-8 h-44 rounded-full bg-gradient-to-r from-white via-gray-100 to-transparent shadow absolute left-0 top-0 z-10 flex items-center justify-center text-2xl">
+            {"<"}
+          </button>
+          <div className="flex-1 flex justify-center gap-4 md:gap-8">
+            {[1, 2, 3].map((n) => (
+              <div
+                key={n}
+                className="w-[170px] sm:w-[220px] md:w-[310px] h-44 rounded-2xl bg-white shadow"
+              ></div>
+            ))}
+          </div>
+          <button className="w-8 h-44 rounded-full bg-gradient-to-l from-white via-gray-100 to-transparent shadow absolute right-0 top-0 z-10 flex items-center justify-center text-2xl">
+            {">"}
+          </button>
+        </div>
+      </div>
+
+      {/* Events grid header */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-2">
         <h2 className="text-2xl font-bold">Events</h2>
         <div className="flex items-center gap-3">
@@ -21,6 +42,8 @@ export default function EventsGrid() {
           </select>
         </div>
       </div>
+
+      {/* Events grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full">
         {[1, 2, 3, 4, 5, 6].map((n) => (
           <div
@@ -43,6 +66,6 @@ export default function EventsGrid() {
           </div>
         ))}
       </div>
-    </div>
+    </main>
   );
 }

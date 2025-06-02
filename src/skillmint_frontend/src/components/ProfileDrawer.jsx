@@ -16,10 +16,13 @@ export default function ProfileDrawer({ open, onClose }) {
       />
       {/* Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full bg-white shadow-xl z-50 transition-transform duration-300 ${
-          open ? "translate-x-0" : "translate-x-full"
-        }`}
-        style={{ width: 400, maxWidth: "100vw" }}
+        className={`
+          fixed right-0 top-12 bottom-8 bg-white shadow-xl z-50
+          transition-transform duration-300
+          w-full max-w-[400px] flex flex-col
+          ${open ? "translate-x-0" : "translate-x-full"}
+        `}
+        // No inline styles, all Tailwind!
       >
         <div className="flex justify-between items-center p-4 border-b">
           <h2 className="font-bold text-lg">
@@ -32,7 +35,7 @@ export default function ProfileDrawer({ open, onClose }) {
             &times;
           </button>
         </div>
-        <div className="p-6">
+        <div className="flex-1 p-6 overflow-y-auto">
           {editMode ? (
             <ProfileEditForm onCancel={() => setEditMode(false)} />
           ) : (
