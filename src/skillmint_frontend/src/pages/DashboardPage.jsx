@@ -1,4 +1,3 @@
-// pages/DashboardPage.jsx
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -16,7 +15,7 @@ export default function DashboardPage() {
       <div className="flex-1 flex w-full relative transition-all duration-300">
         {/* Main layout: Sidebar and Main content */}
         <div
-          className={`flex-1 flex flex-col md:flex-row w-full transition-all duration-300 min-w-0 ${
+          className={`flex-1 flex flex-col md:flex-row w-full min-w-0 transition-all duration-300 ${
             drawerOpen ? "md:mr-[420px]" : ""
           }`}
         >
