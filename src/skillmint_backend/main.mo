@@ -100,12 +100,20 @@ shared actor class Main(init: Types.MainStorage) = Self {
         };
     };
 
+    public query func getUserInfoByPrincipal(principal: Principal): async Types.UserInfo{
+        Option.get(user_get(principal), Types.blank_user_info);
+    };
+
     /***************************
     EVENT METHODS
     ****************************/
 
     public query func getEventInfo(id: Nat) : async Types.EventInfo {
         Option.get(event_get(id), Types.blank_event_info);
+    };
+
+    public query func getLatestEventId(): async Nat{
+        return next_event_id;
     };
 
     //FRONTEND TODO: Make sure to check if the user is an organizer
@@ -498,7 +506,7 @@ shared actor class Main(init: Types.MainStorage) = Self {
         Time.now()
     };
 
-    public query (msg) func WhoAmI(): async Principal {
+    public query (msg) func whoAmI(): async Principal {
         return msg.caller;
     };
 
