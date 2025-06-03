@@ -1,46 +1,55 @@
-import React from "react";
+import React, { useState } from "react";
+import EventCard from "./EventCard"; // adjust the path if needed
 
 export default function EventsGrid() {
+  const [tab, setTab] = useState("all"); // "all" or "created"
   return (
-    <div className="w-full">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-2">
+    <div className="bg-[#F4F8FB] w-full">
+      <div className="w-full flex items-center justify-between mb-6 relative">
+        {/* Left: Events Title */}
         <h2 className="text-2xl font-bold">Events</h2>
-        <div className="flex items-center gap-3">
-          <div className="flex bg-gray-200 rounded-full p-1">
-            <button className="px-5 py-1 rounded-full font-medium transition bg-gray-400 text-white">
-              All Events
-            </button>
-            <button className="px-5 py-1 rounded-full font-medium transition bg-gray-200 text-gray-800">
-              Created Events
-            </button>
-          </div>
-          <select className="ml-2 px-3 py-1 rounded-full bg-gray-200 border-none text-sm focus:ring-0">
-            <option value="latest">Sort</option>
-            <option value="latest">Latest</option>
-            <option value="soonest">Soonest</option>
-          </select>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full">
-        {[1, 2, 3, 4, 5, 6].map((n) => (
-          <div
-            key={n}
-            className="bg-white rounded-xl shadow p-4 flex flex-col min-h-[210px] hover:shadow-lg transition"
+
+        {/* Center: Tabs */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex bg-gray-200 rounded-full p-1">
+          <button
+            className={`px-5 py-1 rounded-full font-medium transition ${
+              tab === "all"
+                ? "bg-gray-400 text-white"
+                : "bg-gray-200 text-gray-800"
+            }`}
+            onClick={() => setTab("all")}
           >
-            <div className="h-20 bg-gray-200 rounded mb-2"></div>
-            <div className="flex gap-2 text-xs mb-1 flex-wrap">
-              <span className="bg-gray-200 rounded px-2 py-0.5">Virtual</span>
-              <span className="bg-gray-200 rounded px-2 py-0.5">Upcoming</span>
-              <span className="text-gray-400">12 days left</span>
-            </div>
-            <div className="font-semibold text-sm truncate">
-              Hackathon – Philippine Blockchain Week 2025
-            </div>
-            <div className="text-xs text-gray-500">
-              May 26, 2025 – June 09, 2025
-            </div>
-            <div className="mt-1 text-xs">Badge</div>
+            All Events
+          </button>
+          <button
+            className={`px-5 py-1 rounded-full font-medium transition ${
+              tab === "created"
+                ? "bg-gray-400 text-white"
+                : "bg-gray-200 text-gray-800"
+            }`}
+            onClick={() => setTab("created")}
+          >
+            Created Events
+          </button>
+        </div>
+
+        {/* Right: Sort Dropdown */}
+        <select className="ml-2 px-3 py-1 rounded-full bg-gray-200 border-none text-sm focus:ring-0">
+          <option value="latest">Sort</option>
+          <option value="latest">Latest</option>
+          <option value="soonest">Soonest</option>
+        </select>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full">
+        {tab === "created" && (
+          <div className="flex items-center justify-center min-h-[210px] border-2 border-dashed border-blue-400 rounded-xl cursor-pointer hover:bg-blue-50 transition">
+            <span className="text-6xl text-blue-400 font-light">+</span>
           </div>
+        )}
+        {/* Example: use your real event data here */}
+        {[1, 2, 3, 4, 5, 6].map((n) => (
+          <EventCard key={n} />
         ))}
       </div>
     </div>

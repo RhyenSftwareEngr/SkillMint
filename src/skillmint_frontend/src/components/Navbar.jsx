@@ -17,7 +17,7 @@ export default function Navbar({ onProfileClick }) {
   }, [menuOpen]);
 
   return (
-    <nav className="w-full h-12 bg-[#393939] flex items-center px-3 sticky top-0 z-30">
+    <nav className="w-full h-12 bg-[#002C54] flex items-center px-3 sticky top-0 z-30">
       {/* Logo */}
       <div className="w-6 h-6 rounded bg-gray-200 mr-2" />
       <span className="text-white font-bold tracking-wide text-lg">

@@ -1,5 +1,6 @@
 import React from "react";
 import NavBarLandingPage from "../components/NavBarLandingPage";
+import { useNavigate } from "react-router-dom";
 
 const abstractBlocks = (
   <div className="flex flex-wrap gap-2 justify-end items-start mt-4">
@@ -13,6 +14,7 @@ const abstractBlocks = (
 );
 
 export default function LandingPage() {
+  const navigate = useNavigate();
   return (
     <div className="font-sans bg-gradient-to-b from-gray-100 to-white min-h-screen flex flex-col">
       <NavBarLandingPage />
@@ -30,7 +32,10 @@ export default function LandingPage() {
           connect with future employers—all on a secure, blockchain-based
           platform.
         </p>
-        <button className="mt-8 px-8 py-3 rounded-full bg-blue-600 text-white text-lg font-semibold shadow hover:bg-blue-700 transition z-10">
+        <button
+          className="mt-8 px-8 py-3 rounded-full bg-blue-600 text-white text-lg font-semibold shadow hover:bg-blue-700 transition z-10"
+          onClick={() => navigate("/dashboard")}
+        >
           Get Started
         </button>
         {/* You can add a pattern/grid background here */}
@@ -115,7 +120,10 @@ export default function LandingPage() {
           Join a thriving community of learners, builders, and employers. Start
           your journey today!
         </p>
-        <button className="px-8 py-3 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition">
+        <button
+          className="px-8 py-3 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition"
+          onClick={() => navigate("/dashboard")}
+        >
           Create Your Profile
         </button>
       </section>
