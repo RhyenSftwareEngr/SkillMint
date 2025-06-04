@@ -3,6 +3,7 @@ import Principal "mo:base/Principal";
 import Int "mo:base/Int";
 import Nat "mo:base/Nat";
 import Time "mo:base/Time";
+import DateTime "mo:datetime/DateTime";
 
 module {
     /*
@@ -114,6 +115,7 @@ module {
         users: [User];
         events: [Event];
     };
+
 
     public func user_key(t: Principal): Trie.Key<Principal> = { key = t; hash = Principal.hash t};
     public func event_key(t: Nat): Trie.Key<Nat> = { key = t; hash = Int.hash t};

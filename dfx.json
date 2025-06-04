@@ -4,7 +4,8 @@
       "type": "motoko",
       "main": "src/skillmint_backend/main.mo",
       "dependencies": ["llm"],
-      "specified_id": "uxrrr-q7777-77774-qaaaq-cai"
+      "specified_id": "uxrrr-q7777-77774-qaaaq-cai",
+      "args": "--enchanced-orthogonal-persistence"
     },
     "skillmint_frontend": {
       "dependencies": [
