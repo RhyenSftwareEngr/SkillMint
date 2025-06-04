@@ -453,8 +453,12 @@ shared actor class Main(init : Types.MainStorage) = Self {
             },
             #user {
                 content = "
+                With the user's information:
+                First name: " # user_info.profile.first_name # "
+                Last Name: " # user_info.profile.last_name # "
+                Bio: " # Option.get(user_info.profile.bio, "No Bio") # "
                 
-                " # user_msg;
+                Response to the User's Query:\n" # user_msg;
             },
         ]).send();
         return Option.get(response.message.content, "No response");
