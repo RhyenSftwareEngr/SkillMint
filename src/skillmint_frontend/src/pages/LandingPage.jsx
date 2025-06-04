@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NavBarLandingPage from "../components/NavBarLandingPage";
+import { AuthClient } from "@dfinity/auth-client";
 import { useNavigate } from "react-router-dom";
 
 const abstractBlocks = (
@@ -15,6 +16,28 @@ const abstractBlocks = (
 
 export default function LandingPage() {
   const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    const authClient = await AuthClient.create();
+
+    const network = process.env.DFX_NETWORK;
+    const identityProvider =
+      network === "ic"
+        ? "https://identity.ic0.app/" // Mainnet
+        : "http://rdmx6-jaaaa-aaaaa-aaadq-cai.localhost:4943/"; // Local
+
+    await authClient.login({
+      identityProvider: identityProvider,
+      onSuccess: async () => {
+        console.log("✅ Login successful");
+        navigate("/dashboard");
+      },
+      onError: (err) => {
+        console.error("❌ Login failed:", err);
+      },
+    });
+  };
+
   return (
     <div className="font-sans bg-gradient-to-b from-gray-100 to-white min-h-screen flex flex-col">
       <NavBarLandingPage />
@@ -34,7 +57,7 @@ export default function LandingPage() {
         </p>
         <button
           className="mt-8 px-8 py-3 rounded-full bg-blue-600 text-white text-lg font-semibold shadow hover:bg-blue-700 transition z-10"
-          onClick={() => navigate("/dashboard")}
+          onClick={handleLogin}
         >
           Get Started
         </button>

@@ -8,12 +8,8 @@
       "args": "--enhanced-orthogonal-persistence"
     },
     "skillmint_frontend": {
-      "dependencies": [
-        "skillmint_backend_main"
-      ],
-      "source": [
-        "src/skillmint_frontend/dist"
-      ],
+      "dependencies": ["skillmint_backend_main"],
+      "source": ["src/skillmint_frontend/dist"],
       "type": "assets",
       "workspace": "skillmint_frontend"
     },
@@ -34,9 +30,7 @@
     "bitcoin": {
       "enabled": true,
       "log_level": "info",
-      "nodes": [
-        "127.0.0.1:18444"
-      ]
+      "nodes": ["127.0.0.1:18444"]
     },
     "build": {
       "args": "",

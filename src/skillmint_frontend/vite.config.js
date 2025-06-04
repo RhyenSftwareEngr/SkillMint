@@ -1,27 +1,28 @@
 /// <reference types="vitest" />
-import { fileURLToPath, URL } from 'url';
-import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
-import environment from 'vite-plugin-environment';
-import dotenv from 'dotenv';
+import { fileURLToPath, URL } from "url";
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import environment from "vite-plugin-environment";
+import dotenv from "dotenv";
 
-dotenv.config({ path: '../../.env' });
+// Load environment variables from root .env file
+dotenv.config({ path: "../../.env" });
 
 export default defineConfig({
   build: {
-    emptyOutDir: true,
+    emptyOutDir: true, // Clear the dist directory before each build
   },
   optimizeDeps: {
     esbuildOptions: {
       define: {
-        global: "globalThis",
+        global: "globalThis", // Required for agent-js compatibility
       },
     },
   },
   server: {
     proxy: {
       "/api": {
-        target: "http://127.0.0.1:4943",
+        target: "http://127.0.0.1:4943", // Proxy to DFX replica
         changeOrigin: true,
       },
     },
@@ -32,18 +33,16 @@ export default defineConfig({
     environment("all", { prefix: "DFX_" }),
   ],
   test: {
-    environment: 'jsdom',
-    setupFiles: 'src/setupTests.js',
+    environment: "jsdom",
+    setupFiles: "src/setupTests.js",
   },
   resolve: {
     alias: [
       {
         find: "declarations",
-        replacement: fileURLToPath(
-          new URL("../declarations", import.meta.url)
-        ),
+        replacement: fileURLToPath(new URL("../declarations", import.meta.url)),
       },
     ],
-    dedupe: ['@dfinity/agent'],
+    dedupe: ["@dfinity/agent"], // Avoid duplication error with agent-js
   },
 });
