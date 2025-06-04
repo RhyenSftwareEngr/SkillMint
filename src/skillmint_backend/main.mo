@@ -6,9 +6,10 @@ import Option "mo:base/Option";
 import Time "mo:base/Time";
 import Array "mo:base/Array";
 import LLM "mo:llm";
+import DateTime "mo:datetime/DateTime"; //TODO: IMPLEMENT DATE TIME
+import DTComponents "mo:datetime/Components"
 
 shared actor class Main(init: Types.MainStorage) = Self {
-
     /***************************
     DEFAULT VALUES AND PRIVATE FUNCTIONS
     ****************************/
@@ -113,7 +114,7 @@ shared actor class Main(init: Types.MainStorage) = Self {
     };
 
     public query func getLatestEventId(): async Nat{
-        return next_event_id;
+        return next_event_id-1;
     };
 
     //FRONTEND TODO: Make sure to check if the user is an organizer
@@ -502,8 +503,9 @@ shared actor class Main(init: Types.MainStorage) = Self {
     // };
 
     //Random function to test the actor. Please remove it in production.
-    public query func getTimeNow(): async Time.Time{
-        Time.now()
+    public query func getTimeNow(): async DTComponents.Components{
+        let date = DateTime.now().toComponents();
+        return date;
     };
 
     public query (msg) func whoAmI(): async Principal {
