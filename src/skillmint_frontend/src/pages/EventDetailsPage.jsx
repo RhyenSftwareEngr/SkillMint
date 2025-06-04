@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import ProfileDrawer from "../components/ProfileDrawer";
 
 // Dummy data (replace with real event object)
 const mockEvent = {
@@ -100,10 +103,12 @@ const mockEvent = {
 export default function EventDetailsPage({ event = mockEvent }) {
   const [tab, setTab] = useState("Details");
   const tabNames = ["Details", "Attachment"];
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#F4F8FB] flex flex-col">
       {/* Padding for fixed nav (if any) */}
+      <Navbar onProfileClick={() => setDrawerOpen(true)} />
       <div className="pt-4 pb-2 max-w-6xl w-full mx-auto px-2 sm:px-6 flex-1">
         {/* Breadcrumb */}
         <nav className="text-xs text-gray-500 mb-2 flex gap-1">
@@ -285,7 +290,9 @@ export default function EventDetailsPage({ event = mockEvent }) {
             </div>
           </div>
         </div>
+        <ProfileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
       </div>
+      <Footer />
     </div>
   );
 }
