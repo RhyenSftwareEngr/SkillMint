@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import EventCard from "./EventCard"; // adjust the path if needed
 
-export default function EventsGrid() {
+export default function EventsGrid({ onCreateEventClick }) {
   const [tab, setTab] = useState("all"); // "all" or "created"
+
   return (
     <div className="bg-[#F4F8FB] w-full">
       <div className="w-full flex items-center justify-between mb-6 relative">
@@ -43,7 +44,10 @@ export default function EventsGrid() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full">
         {tab === "created" && (
-          <div className="flex items-center justify-center min-h-[210px] border-2 border-dashed border-blue-400 rounded-xl cursor-pointer hover:bg-blue-50 transition">
+          <div
+            className="flex items-center justify-center min-h-[210px] border-2 border-dashed border-blue-400 rounded-xl cursor-pointer hover:bg-blue-50 transition"
+            onClick={onCreateEventClick}
+          >
             <span className="text-6xl text-blue-400 font-light">+</span>
           </div>
         )}

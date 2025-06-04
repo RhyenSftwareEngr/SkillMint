@@ -5,9 +5,11 @@ import ProfileDrawer from "../components/ProfileDrawer";
 import LeftSidebar from "../components/LeftSidebar";
 import Carousel from "../components/Carousel";
 import EventsGrid from "../components/EventsGrid";
+import CreateEventModal from "../components/CreateEventModal";
 
 export default function DashboardPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [createEventOpen, setCreateEventOpen] = useState(false);
 
   return (
     <div className="min-h-screen flex flex-col font-sans bg-[#E8E8E8]">
@@ -26,7 +28,11 @@ export default function DashboardPage() {
           {/* Main Area */}
           <main className="flex-1 flex flex-col min-w-0 px-2 sm:px-4 md:px-6 py-2 sm:py-4 md:py-6">
             <Carousel />
-            <EventsGrid />
+            <EventsGrid onCreateEventClick={() => setCreateEventOpen(true)} />
+            <CreateEventModal
+              open={createEventOpen}
+              onClose={() => setCreateEventOpen(false)}
+            />
           </main>
         </div>
 
