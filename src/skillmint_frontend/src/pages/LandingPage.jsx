@@ -1,67 +1,38 @@
-import React, { useEffect, useState } from "react";
-import NavBarLandingPage from "../components/NavBarLandingPage";
+import React, { useState, useEffect } from "react";
 import { AuthClient } from "@dfinity/auth-client";
+import {
+  createActor,
+  canisterId,
+} from "../../../declarations/skillmint_backend_main";
 import { useNavigate } from "react-router-dom";
-import { createActor } from "../../../declarations/skillmint_backend_main";
-import { canisterId } from "../../../declarations/skillmint_backend_main/index.js";
-
-const abstractBlocks = (
-  <div className="flex flex-wrap gap-2 justify-end items-start mt-4">
-    <div className="w-24 h-4 bg-gray-200 rounded"></div>
-    <div className="w-36 h-4 bg-gray-300 rounded"></div>
-    <div className="w-28 h-4 bg-gray-400 rounded"></div>
-    <div className="w-40 h-4 bg-gray-200 rounded"></div>
-    <div className="w-20 h-4 bg-gray-300 rounded"></div>
-    <div className="w-32 h-4 bg-gray-400 rounded"></div>
-  </div>
-);
+import NavBarLandingPage from "../components/NavBarLandingPage";
 
 export default function LandingPage() {
   const navigate = useNavigate();
-
-  const [state, setState] = useState({
-    actor: undefined,
-    authClient: undefined,
-    isAuthenticated: false
-  });
+  const [authClient, setAuthClient] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    updateActor();
+    AuthClient.create().then(async (client) => {
+      setAuthClient(client);
+      const loggedIn = await client.isAuthenticated();
+      setIsAuthenticated(loggedIn);
+    });
   }, []);
 
-  const updateActor = async () => {
-    const authClient = await AuthClient.create();
-    const identity = authClient.getIdentity();
-    const actor = createActor(canisterId, {
-      agentOptions: {
-        identity
-      }
-    })
-
-    const isAuthenticated = await authClient.isAuthenticated();
-
-    setState((prev)=>({
-      ...prev,
-      actor,
-      authClient,
-      isAuthenticated
-    }))
-  }
-
   const handleLogin = async () => {
-    const authClient = await AuthClient.create();
-
-    const network = process.env.DFX_NETWORK;
-    const identityProvider =
-      network === "ic"
-        ? "https://identity.ic0.app/" // Mainnet
-        : "http://rdmx6-jaaaa-aaaaa-aaadq-cai.localhost:4943/"; // Local
+    if (!authClient) return;
 
     await authClient.login({
-      identityProvider: identityProvider,
+      identityProvider:
+        process.env.DFX_NETWORK === "ic"
+          ? "https://identity.ic0.app/"
+          : "http://rdmx6-jaaaa-aaaaa-aaadq-cai.localhost:4943/",
       onSuccess: async () => {
-        console.log("✅ Login successful");
-        updateActor;
+        const identity = authClient.getIdentity();
+        createActor(canisterId, {
+          agentOptions: { identity },
+        });
         navigate("/dashboard");
       },
       onError: (err) => {
@@ -71,134 +42,180 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="font-sans bg-gradient-to-b from-gray-100 to-white min-h-screen flex flex-col">
+    <div className="font-sans bg-white min-h-screen">
+      {/* Navbar */}
       <NavBarLandingPage />
+
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-sky-100 to-blue-100 py-20 flex flex-col items-center relative">
-        <div className="absolute inset-0 opacity-30 bg-[url('/grid.svg')] bg-repeat pointer-events-none" />
-        <h1 className="text-5xl md:text-6xl font-bold text-gray-900 drop-shadow-lg text-center z-10">
-          SkillMint
-        </h1>
-        <p className="text-xl md:text-2xl font-medium mt-4 mb-6 text-center text-gray-700 z-10">
-          Unleash Verified Talent
-        </p>
-        <p className="max-w-xl mx-auto text-center text-gray-600 z-10">
-          Build your verified tech profile. Earn badges, join events, and
-          connect with future employers—all on a secure, blockchain-based
-          platform.
-        </p>
-        <button
-          className="mt-8 px-8 py-3 rounded-full bg-blue-600 text-white text-lg font-semibold shadow hover:bg-blue-700 transition z-10"
-          onClick={handleLogin}
-        >
-          Get Started
-        </button>
-        {/* You can add a pattern/grid background here */}
-        <div className="mt-16 w-full flex justify-center">
-          <div className="grid grid-cols-5 gap-4 w-full max-w-4xl">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="h-12 bg-white rounded-xl shadow" />
-            ))}
-          </div>
+      <section className="relative">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1 h-[70vh] overflow-hidden">
+          {[...Array(12)].map((_, i) => (
+            <div key={i} className="h-full">
+              <img
+                src={`/hero${i + 1}.png`}
+                alt={`bg-${i}`}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
+        <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-center items-center text-white text-center px-4">
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
+            SkillMInt
+          </h1>
+          <h2 className="text-2xl md:text-4xl font-semibold mb-4">
+            Unleash Verified Talent
+          </h2>
+          <p className="max-w-2xl text-base md:text-xl mb-6">
+            Empower students with blockchain-based credentials— whether you're
+            recognizing real-world skills or connecting future-ready talent to
+            opportunities.
+          </p>
+          <button
+            className="bg-white text-black font-semibold px-8 py-3 rounded-full shadow hover:bg-gray-100 transition"
+            onClick={handleLogin}
+          >
+            Join Us
+          </button>
         </div>
       </section>
 
-      {/* Where Skills Meet Opportunity */}
-      <section className="py-16 px-4 max-w-6xl mx-auto flex flex-col md:flex-row gap-8 items-center">
-        <div className="flex-1">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-gray-900">
-            Where Skills Meet Opportunity
-          </h2>
-          <p className="text-gray-600 mb-6">
-            SkillMint connects students and professionals with real-world tech
-            opportunities. Showcase your abilities with verifiable badges,
-            participate in curated events, and join a community that values true
-            skill. Whether you’re seeking internships, hackathons, or your dream
-            job—SkillMint helps you stand out, everywhere.
-          </p>
-          <button className="px-6 py-2 bg-gray-800 text-white rounded-full font-medium hover:bg-gray-900 transition">
-            Learn More
-          </button>
+      {/* Skills Meet Opportunity Section */}
+      <section className="py-16 text-center max-w-5xl mx-auto px-4">
+        <h2 className="text-4xl font-bold text-blue-900 mb-4">
+          Where Skills Meet Opportunity
+        </h2>
+        <p className="text-gray-700 text-lg">
+          SkillMint is a decentralized platform that helps ICT students in the
+          Philippines build real-world experience and verified portfolios.
+          Through hackathons, bounties, and community-driven challenges,
+          learners earn NFT-based credentials that prove their skills. The
+          platform bridges education and opportunity, connecting students with
+          events, collaborators, and future-ready tools.
+        </p>
+      </section>
+
+      {/* Highlights Section */}
+      <section className="px-6 mb-16">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-semibold">Upcoming Highlights</h3>
+          <span className="text-blue-700 font-medium cursor-pointer">
+            Show More →
+          </span>
         </div>
-        <div className="flex-1">{abstractBlocks}</div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="rounded-xl overflow-hidden shadow">
+              <img
+                src={`/hack${i + 1}.png`}
+                alt={`event-${i}`}
+                className="w-full h-40 object-cover"
+              />
+              <div className="p-3 text-sm text-gray-800">
+                Hackathon – Philippine Blockchain Week 2025
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* SCOPE Section */}
-      <section className="relative py-20 bg-gray-50">
-        <h2 className="absolute top-6 left-1/2 -translate-x-1/2 text-[5rem] md:text-[7rem] font-extrabold text-gray-200 tracking-wide select-none opacity-70 pointer-events-none">
+      <section className="bg-[#022c52] text-white py-24 text-center relative overflow-hidden">
+        <h2 className="absolute top-10 left-1/2 -translate-x-1/2 text-[7rem] font-extrabold text-white opacity-10 select-none pointer-events-none">
           SCOPE
         </h2>
-        <div className="relative z-10 flex justify-center gap-6 mt-24">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div
-              key={i}
-              className="w-40 h-40 rounded-2xl bg-white shadow-lg flex flex-col items-center justify-end p-4"
-            >
-              <div className="w-full h-3/5 bg-gray-200 rounded mb-4"></div>
-              <div className="w-3/4 h-4 bg-gray-300 rounded mb-1"></div>
-              <div className="w-1/2 h-4 bg-gray-100 rounded"></div>
+        <div className="relative z-10 max-w-6xl mx-auto grid md:grid-cols-4 gap-12 px-6">
+          {[
+            {
+              title: "Indentity-Linked Profiles",
+              desc: "Create trusted user profiles backed by Internet Identity for secure, verifiable data.",
+            },
+            {
+              title: "Project-safe login",
+              desc: "Your login uses Internet Identity for secure, personal access, keeping your profile and data safe from unauthorized use.",
+            },
+            {
+              title: "Tamper-proof credentials",
+              desc: "Your identity and credentials are secured in a way that no one can alter or forge them, guaranteeing authenticity and trustworthiness.",
+            },
+            {
+              title: "All users",
+              desc: "This profile system supports a range of users—from students developing skills to professionals and organizers managing events.",
+            },
+          ].map((item, idx) => (
+            <div key={idx}>
+              <h4 className="font-semibold text-lg mb-2">{item.title}</h4>
+              <p className="text-sm text-gray-200 leading-relaxed">
+                {item.desc}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* EVENTS Section */}
-      <section className="relative py-20 bg-gradient-to-br from-blue-50 to-gray-100">
-        <h2 className="absolute top-6 left-1/2 -translate-x-1/2 text-[4rem] md:text-[6rem] font-extrabold text-gray-300 tracking-wide select-none pointer-events-none">
-          EVENTS
-        </h2>
-        <div className="relative z-10 flex gap-6 justify-center mt-24">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div
-              key={i}
-              className="w-72 h-48 bg-white rounded-xl shadow-md flex flex-col justify-end p-4"
-            >
-              <div className="w-full h-3/4 bg-gray-200 rounded mb-3"></div>
-              <div className="w-1/2 h-4 bg-gray-300 rounded"></div>
-            </div>
-          ))}
-          {/* Pagination dots example */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-            <span className="w-2 h-2 bg-gray-500 rounded-full"></span>
-            <span className="w-2 h-2 bg-gray-300 rounded-full"></span>
-            <span className="w-2 h-2 bg-gray-300 rounded-full"></span>
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action */}
-      <section className="py-16 text-center">
-        <h3 className="text-2xl md:text-3xl font-bold mb-3 text-gray-800">
+      {/* Call to Action Section */}
+      <section className="py-20 bg-white text-center">
+        <h3 className="text-3xl md:text-4xl font-bold mb-3 text-gray-800">
           Begin Building Your Verified Future
         </h3>
         <p className="mb-6 text-gray-600">
-          Join a thriving community of learners, builders, and employers. Start
-          your journey today!
+          Your skills deserve to be seen, verified, and celebrated.
+          <br />
+          Join a community where learning meets recognition — and every
+          experience counts.
         </p>
         <button
-          className="px-8 py-3 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition"
-          onClick={() => navigate("/dashboard")}
+          className="px-8 py-3 rounded-full bg-[#002e5b] text-white font-semibold shadow hover:bg-blue-700 transition"
+          onClick={handleLogin}
         >
-          Create Your Profile
+          Join SkillMint
         </button>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-100 py-8 text-center mt-auto">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <span className="text-sm">
-            &copy; 2025 SkillMint. All rights reserved.
-          </span>
-          <div className="flex gap-4">
-            {/* Replace with links */}
-            <span className="hover:underline cursor-pointer">About</span>
-            <span className="hover:underline cursor-pointer">Contact</span>
-            <span className="hover:underline cursor-pointer">Privacy</span>
-            {/* Social icons placeholder */}
-            <span className="ml-4 flex gap-2">
-              <span className="bg-white rounded-full w-6 h-6 inline-block"></span>
-              <span className="bg-white rounded-full w-6 h-6 inline-block"></span>
-            </span>
+      <footer className="bg-gray-100 text-gray-800 py-12 text-center mt-auto border-t border-gray-200">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-left px-4">
+          <div>
+            <img src="/logo.png" alt="logo" className="w-10 mb-3" />
+            <p className="text-sm">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-2">QUICK LINKS</h4>
+            <ul className="text-sm space-y-1">
+              <li>About SkillMint</li>
+              <li>Events & Bounties</li>
+              <li>NFT Credentials</li>
+              <li>Portfolio Builder</li>
+              <li>For Partners & Educators</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-2">SUPPORT</h4>
+            <ul className="text-sm space-y-1">
+              <li className="font-bold">Need Help?</li>
+              <li>How It Works</li>
+              <li>FAQs</li>
+              <li>Help Center</li>
+              <li>Terms & Conditions</li>
+              <li>Privacy Policy</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-2">CONTACT US</h4>
+            <ul className="text-sm space-y-1">
+              <li>Message</li>
+              <li>Email ↗</li>
+              <li>Discord ↗</li>
+            </ul>
+            <div className="flex gap-3 mt-4">
+              <div className="w-6 h-6 bg-black rounded"></div>
+              <div className="w-6 h-6 bg-black rounded"></div>
+              <div className="w-6 h-6 bg-black rounded"></div>
+              <div className="w-6 h-6 bg-black rounded"></div>
+            </div>
           </div>
         </div>
       </footer>
