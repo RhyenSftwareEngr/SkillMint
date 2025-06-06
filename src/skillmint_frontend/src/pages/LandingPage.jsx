@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import NavBarLandingPage from "../components/NavBarLandingPage";
 import { AuthClient } from "@dfinity/auth-client";
 import { useNavigate } from "react-router-dom";
+import { createActor } from "../../../declarations/skillmint_backend_main";
+import { canisterId } from "../../../declarations/skillmint_backend_main/index.js";
 
 const abstractBlocks = (
   <div className="flex flex-wrap gap-2 justify-end items-start mt-4">
@@ -17,6 +19,35 @@ const abstractBlocks = (
 export default function LandingPage() {
   const navigate = useNavigate();
 
+  const [state, setState] = useState({
+    actor: undefined,
+    authClient: undefined,
+    isAuthenticated: false
+  });
+
+  useEffect(() => {
+    updateActor();
+  }, []);
+
+  const updateActor = async () => {
+    const authClient = await AuthClient.create();
+    const identity = authClient.getIdentity();
+    const actor = createActor(canisterId, {
+      agentOptions: {
+        identity
+      }
+    })
+
+    const isAuthenticated = await authClient.isAuthenticated();
+
+    setState((prev)=>({
+      ...prev,
+      actor,
+      authClient,
+      isAuthenticated
+    }))
+  }
+
   const handleLogin = async () => {
     const authClient = await AuthClient.create();
 
@@ -30,6 +61,7 @@ export default function LandingPage() {
       identityProvider: identityProvider,
       onSuccess: async () => {
         console.log("✅ Login successful");
+        updateActor;
         navigate("/dashboard");
       },
       onError: (err) => {

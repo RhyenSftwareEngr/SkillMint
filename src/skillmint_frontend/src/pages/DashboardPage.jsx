@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProfileDrawer from "../components/ProfileDrawer";
@@ -6,6 +6,31 @@ import LeftSidebar from "../components/LeftSidebar";
 import Carousel from "../components/Carousel";
 import EventsGrid from "../components/EventsGrid";
 import CreateEventModal from "../components/CreateEventModal";
+// import { useAuth } from "../context/AuthContext";
+// import { toast } from "react-toastify";
+
+// const { auth } = useAuth();
+
+// useEffect(() => {
+//   const checkUser = async () => {
+//     if (auth.actor && auth.isAuthenticated){
+//       const exists = await auth.actor.userExist();
+//       if (!exists) {
+//         // Redirect to profile edit page or show modal
+//         // navigate("/edit-profile");
+//         toast.info("Please complete your profile to use all features!");
+//       }
+//       else{
+//         const user_profile = await auth.actor.getUserInfo();
+//         const user_firstname =
+//           user_profile?.profile?.first_name || "User";
+//         toast.info(`Welcome back, ${user_firstname}!`);
+//       }
+//     }
+//   };
+//   checkUser();
+// }, [auth]
+// );
 
 export default function DashboardPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
