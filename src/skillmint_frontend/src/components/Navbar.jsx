@@ -19,8 +19,9 @@ export default function Navbar({ onProfileClick }) {
   return (
     <nav className="w-full h-12 bg-[#002C54] flex items-center px-3 sticky top-0 z-30">
       {/* Logo */}
-      <div className="w-6 h-6 rounded bg-gray-200 mr-2" />
-      <span className="text-white font-bold tracking-wide text-lg">
+      {/* <div className="w-6 h-6 rounded bg-gray-200 mr-2" /> */}
+      <img src="/logo.png" alt="SkillMint Logo" className="w-10 h-10 mr-2" />
+      <span className="text-xl font-bold text-blue-700 tracking-tight">
         SkillMint
       </span>
 

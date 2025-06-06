@@ -41,6 +41,12 @@ export default function LandingPage() {
     });
   };
 
+  // const test = actor.whoAmI();
+  // //if hindi gumana, remove .toStrng() then uncomment below
+  // //const name = test.toString();
+  // //console.log(name)
+  // console.log(test);
+
   return (
     <div className="font-sans bg-white min-h-screen">
       {/* Navbar */}
