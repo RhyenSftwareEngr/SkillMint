@@ -1,17 +1,23 @@
 import { HttpAgent, Actor } from "@dfinity/agent";
 import { idlFactory as backendIdlFactory } from "../../../declarations/skillmint_backend_main";
 import { idlFactory as llmIdlFactory } from "../../../declarations/llm";
+import canisterIds from '../../../../.dfx/playground/canister_ids.json';
 
 // WARNING: Use this backend actor everywhere in the frontend for consistent canister calls and error handling.
 
 // Canister IDs from environment
-const backendCanisterId = process.env.CANISTER_ID_SKILLMINT_BACKEND_MAIN;
-const llmCanisterId = process.env.CANISTER_ID_LLM;
+const backendCanisterId = canisterIds.skillmint_backend_main.playground;
+const llmCanisterId = canisterIds.llm.playground;
+
+const isLocal = process.env.DFX_NETWORK === "local";
 
 // Local development host
-const host = "http://127.0.0.1:4943";
+const host = isLocal
+  ? "http://127.0.0.1:4943"
+  : "https://icp0.io";
 
 // Create a generic actor
+console.log("Backend canister ID:", backendCanisterId);
 function createActor(canisterId, idlFactory) {
   const agent = new HttpAgent({ host });
 
@@ -33,7 +39,6 @@ function createActor(canisterId, idlFactory) {
 
 // Export named actors
 export const backend = createActor(backendCanisterId, backendIdlFactory);
-export const llm = createActor(llmCanisterId, llmIdlFactory);
 
 // Helper to get a single event by ID
 export async function getEventInfo(id) {
