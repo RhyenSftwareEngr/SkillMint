@@ -51,7 +51,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (!authClient) return;
     console.log("[AuthContext] login() called");
     await authClient.login({
-      identityProvider: "http://rdmx6-jaaaa-aaaaa-aaadq-cai.localhost:4943/",
+      identityProvider: import.meta.env.VITE_DFX_NETWORK === "local" ? "https://2btah-yaaaa-aaaab-qaciq-cai.icp0.io/" : "https://identity.ic0.app",
       onSuccess: async () => {
         setIsAuthenticated(true);
         const id = authClient.getIdentity();

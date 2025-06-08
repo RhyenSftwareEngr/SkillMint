@@ -9,6 +9,7 @@ import canisterIds from '../../../../.dfx/playground/canister_ids.json';
 const backendCanisterId = canisterIds.skillmint_backend_main.playground;
 
 const isLocal = process.env.DFX_NETWORK === "local";
+console.log("isLocal", isLocal);
 
 // Local development host
 const host = isLocal
