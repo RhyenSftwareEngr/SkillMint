@@ -8,11 +8,14 @@ import DTComponents "mo:datetime/Components";
 import Iter "mo:base/Iter";
 import Int "mo:base/Int";
 import Order "mo:base/Order";
+import Blob "mo:base/Blob";
 
 actor Main {
   stable var users : [Types.User] = [];
   stable var events : [Types.Event] = [];
   stable var next_event_id : Nat = 1;
+  stable var files : [Types.File] = [];
+  stable var next_file_id : Nat = 0;
 
   // Add a new event
   public func addEvent(profile : Types.EventProfile) : async Nat {
@@ -153,8 +156,16 @@ actor Main {
         };
         banner_image = ?"https://images.unsplash.com/photo-1461749280684-dccba630e2f6";
         attachments = [
-          { name = "Hackathon_Rules.pdf"; url = ?"https://example.com/Hackathon_Rules.pdf"; type = "pdf" },
-          { name = "Schedule.xlsx"; url = ?"https://example.com/Schedule.xlsx"; type = "xlsx" }
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
         ];
       },
       {
@@ -177,10 +188,19 @@ actor Main {
         };
         banner_image = ?"https://images.unsplash.com/photo-1519389950473-47ba0277781c";
         attachments = [
-          { name = "Hackathon_Rules.pdf"; url = ?"https://example.com/Hackathon_Rules.pdf"; type = "pdf" },
-          { name = "Schedule.xlsx"; url = ?"https://example.com/Schedule.xlsx"; type = "xlsx" }
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
         ];
       },
+
       {
         event_name = "AI for Good Summit";
         event_description = "AI for social impact and innovation.";
@@ -209,8 +229,16 @@ actor Main {
         };
         banner_image = ?"https://images.unsplash.com/photo-1465101178521-c1a9136a3b99";
         attachments = [
-          { name = "Hackathon_Rules.pdf"; url = ?"https://example.com/Hackathon_Rules.pdf"; type = "pdf" },
-          { name = "Schedule.xlsx"; url = ?"https://example.com/Schedule.xlsx"; type = "xlsx" }
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
         ];
       },
       {
@@ -241,8 +269,16 @@ actor Main {
         };
         banner_image = ?"https://images.unsplash.com/photo-1507842217343-583bb7270b66";
         attachments = [
-          { name = "Hackathon_Rules.pdf"; url = ?"https://example.com/Hackathon_Rules.pdf"; type = "pdf" },
-          { name = "Schedule.xlsx"; url = ?"https://example.com/Schedule.xlsx"; type = "xlsx" }
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
         ];
       },
       {
@@ -273,8 +309,16 @@ actor Main {
         };
         banner_image = ?"https://images.unsplash.com/photo-1505740420928-5e560c06d30e";
         attachments = [
-          { name = "Hackathon_Rules.pdf"; url = ?"https://example.com/Hackathon_Rules.pdf"; type = "pdf" },
-          { name = "Schedule.xlsx"; url = ?"https://example.com/Schedule.xlsx"; type = "xlsx" }
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
         ];
       },
       {
@@ -297,8 +341,16 @@ actor Main {
         };
         banner_image = ?"https://images.unsplash.com/photo-1507358522600-9f71e620c44e";
         attachments = [
-          { name = "Hackathon_Rules.pdf"; url = ?"https://example.com/Hackathon_Rules.pdf"; type = "pdf" },
-          { name = "Schedule.xlsx"; url = ?"https://example.com/Schedule.xlsx"; type = "xlsx" }
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
         ];
       },
       {
@@ -329,8 +381,16 @@ actor Main {
         };
         banner_image = ?"https://images.unsplash.com/photo-1506744038136-46273834b3fb";
         attachments = [
-          { name = "Hackathon_Rules.pdf"; url = ?"https://example.com/Hackathon_Rules.pdf"; type = "pdf" },
-          { name = "Schedule.xlsx"; url = ?"https://example.com/Schedule.xlsx"; type = "xlsx" }
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
         ];
       },
       {
@@ -361,8 +421,16 @@ actor Main {
         };
         banner_image = ?"https://images.unsplash.com/photo-1519125323398-675f0ddb6308";
         attachments = [
-          { name = "Hackathon_Rules.pdf"; url = ?"https://example.com/Hackathon_Rules.pdf"; type = "pdf" },
-          { name = "Schedule.xlsx"; url = ?"https://example.com/Schedule.xlsx"; type = "xlsx" }
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
         ];
       },
       {
@@ -393,8 +461,16 @@ actor Main {
         };
         banner_image = ?"https://images.unsplash.com/photo-1519389950473-47ba0277781c";
         attachments = [
-          { name = "Hackathon_Rules.pdf"; url = ?"https://example.com/Hackathon_Rules.pdf"; type = "pdf" },
-          { name = "Schedule.xlsx"; url = ?"https://example.com/Schedule.xlsx"; type = "xlsx" }
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
         ];
       },
       {
@@ -417,13 +493,41 @@ actor Main {
         };
         banner_image = ?"https://images.unsplash.com/photo-1465101046530-73398c7f28ca";
         attachments = [
-          { name = "Hackathon_Rules.pdf"; url = ?"https://example.com/Hackathon_Rules.pdf"; type = "pdf" },
-          { name = "Schedule.xlsx"; url = ?"https://example.com/Schedule.xlsx"; type = "xlsx" }
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
         ];
       },
     ];
     for (profile in demoEvents.vals()) {
       ignore addEvent(profile);
     };
+  };
+
+  // Upload a file and return its ID
+  public func uploadFile(name : Text, content : [Nat8], filefile_type : Text) : async Nat {
+    let id = next_file_id;
+    next_file_id += 1;
+    let file : Types.File = {
+      id = id;
+      name = name;
+      content = content;
+      filefile_type = filefile_type;
+      uploaded_at = Time.now();
+    };
+    files := Array.append<Types.File>(files, [file]);
+    return id;
+  };
+
+  // Retrieve a file by ID
+  public query func getFile(id : Nat) : async ?Types.File {
+    Array.find<Types.File>(files, func(f) = f.id == id);
   };
 };

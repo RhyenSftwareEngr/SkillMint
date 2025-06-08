@@ -5,12 +5,12 @@ import DateTime "mo:datetime/DateTime";
 
 module {
   /*
-    This module defines the data types used in the SkillMint backend.
-    Some terminology to differentiate between the types:
+    This module defines the data file_types used in the SkillMint backend.
+    Some terminology to differentiate between the file_types:
     - Profile: This are editable data controlled by the user.
     - Info: This are system managed data that are not editable by the user.
-    - Event: This is a type that represents an event in the system.
-    - User: This is a type that represents a user in the system.
+    - Event: This is a file_type that represents an event in the system.
+    - User: This is a file_type that represents a user in the system.
     */
 
   public type UserProfile = {
@@ -48,6 +48,7 @@ module {
     tags : [Text];
     badge : Badge;
     banner_image : ?Text;
+    attachments : [Attachment];
   };
   public type EventInfo = {
     profile : EventProfile;
@@ -98,11 +99,19 @@ module {
     info : EventInfo;
   };
 
-  // public type FileChunk = {
+  public type File = {
+    id : Nat;
+    name : Text;
+    content : [Nat8];
+    filefile_type : Text;
+    uploaded_at : Time.Time;
+  };
+
+  // public file_type FileChunk = {
   //     chunk: Blob;
   //     index: Nat;
   // };
-  // public type File = {
+  // public file_type File = {
   //     name: Text;
   //     chunk: [FileChunk]
   // };
@@ -151,11 +160,18 @@ module {
         image_url = null;
       };
       banner_image = null;
+      attachments = [];
     };
     status = #Cancelled;
     event_organizers = [];
     attendees = [];
     created_at = 0;
     updated_at = 0;
+  };
+
+  public type Attachment = {
+    name : Text;
+    url : ?Text;
+    file_type : Text
   };
 };
