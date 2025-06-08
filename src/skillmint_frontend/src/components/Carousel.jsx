@@ -3,39 +3,24 @@ import React from "react";
 // Dummy data (for demo)
 const cards = Array.from({ length: 11 });
 
-export default function Carousel() {
+export default function Carousel({ featuredEvents }) {
+  if (!featuredEvents || featuredEvents.length === 0) {
+    return <div className="w-full flex justify-center items-center h-40 bg-gray-100 rounded-xl">No featured events</div>;
+  }
+  const event = featuredEvents[0];
+  const profile = event.info?.profile || {};
+  const bannerImage = profile.banner_image ? profile.banner_image + "?w=1200&auto=format" : null;
   return (
-    <div className="w-full flex justify-center mb-8">
-      <div className="relative overflow-x-hidden max-w-[420px] sm:max-w-[630px] md:max-w-[840px]">
-        <div className="relative">
-          {/* Left arrow */}
-          <button className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-44 items-center justify-center rounded-full bg-gradient-to-r from-white via-gray-100 to-transparent shadow text-2xl">
-            {"<"}
-          </button>
-          {/* Cards */}
-          <div className="flex gap-4">
-            {cards.map((_, i) => (
-              <div
-                key={i}
-                className="
-                  flex-shrink-0 h-44 rounded-xl shadow-lg
-                  w-[120px] sm:w-[180px] md:w-[240px]
-                  bg-gradient-to-br from-blue-200 to-blue-400
-                  flex items-center justify-center
-                "
-              >
-                <span className="text-white text-lg font-semibold tracking-wide">
-                  Event {i + 1}
-                </span>
-              </div>
-            ))}
-          </div>
-          {/* Right arrow */}
-          <button className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-44 items-center justify-center rounded-full bg-gradient-to-l from-white via-gray-100 to-transparent shadow text-2xl">
-            {">"}
-          </button>
-        </div>
-      </div>
+    <div className="w-full flex justify-center items-center">
+      {bannerImage ? (
+        <img
+          src={bannerImage}
+          alt={profile.event_name || "Featured Event"}
+          className="w-full max-h-64 object-cover rounded-xl shadow"
+        />
+      ) : (
+        <div className="w-full h-64 bg-gray-200 rounded-xl flex items-center justify-center">No image</div>
+      )}
     </div>
   );
 }

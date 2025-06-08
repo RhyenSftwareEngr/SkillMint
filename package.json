@@ -16,6 +16,7 @@
     "src/skillmint_frontend"
   ],
   "dependencies": {
+    "@dfinity/identity": "^2.4.1",
     "react-toastify": "^11.0.5"
   }
 }

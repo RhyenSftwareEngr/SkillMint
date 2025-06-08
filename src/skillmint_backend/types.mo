@@ -1,6 +1,4 @@
-import Trie "mo:base/Trie";
 import Principal "mo:base/Principal";
-import Int "mo:base/Int";
 import Nat "mo:base/Nat";
 import Time "mo:base/Time";
 import DateTime "mo:datetime/DateTime";
@@ -49,8 +47,7 @@ module {
     max_attendees : ?Nat;
     tags : [Text];
     badge : Badge;
-    // requirements: ?Text;
-    // image_url: ?Text;
+    banner_image : ?Text;
   };
   public type EventInfo = {
     profile : EventProfile;
@@ -115,29 +112,6 @@ module {
     events : [Event];
   };
 
-  public func user_key(t : Principal) : Trie.Key<Principal> = {
-    key = t;
-    hash = Principal.hash t;
-  };
-  public func event_key(t : Nat) : Trie.Key<Nat> = {
-    key = t;
-    hash = Int.hash t;
-  };
-  public func users_fromArray(arr : [User]) : Trie.Trie<Principal, UserInfo> {
-    var sample = Trie.empty<Principal, UserInfo>();
-    for (user in arr.vals()) {
-      sample := Trie.put(sample, user_key(user.principal), Principal.equal, user.info).0;
-    };
-    return sample;
-  };
-  public func events_fromArray(arr : [Event]) : Trie.Trie<Nat, EventInfo> {
-    var sample = Trie.empty<Nat, EventInfo>();
-    for (event in arr.vals()) {
-      sample := Trie.put(sample, event_key(event.id), Nat.equal, event.info).0;
-    };
-    return sample;
-  };
-
   public let blank_user_info : UserInfo = {
     profile = {
       first_name = "";
@@ -176,6 +150,7 @@ module {
         description = "";
         image_url = null;
       };
+      banner_image = null;
     };
     status = #Cancelled;
     event_organizers = [];

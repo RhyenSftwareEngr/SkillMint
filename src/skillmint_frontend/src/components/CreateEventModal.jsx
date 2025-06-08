@@ -1,11 +1,37 @@
 import React, { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 export default function CreateEventModal({ open, onClose }) {
-  const [location, setLocation] = useState("onsite"); // default to "onsite"
-  // State for date
+  const { actor } = useAuth();
+  // Form state
+  const [eventName, setEventName] = useState("");
+  const [description, setDescription] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [location, setLocation] = useState("onsite");
+  const [virtualLink, setVirtualLink] = useState("");
+  const [maxAttendees, setMaxAttendees] = useState("");
+  const [tags, setTags] = useState("");
+  const [details, setDetails] = useState("");
   const [sameDay, setSameDay] = useState(false);
-  // State for time
   const [wholeDay, setWholeDay] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [establishment, setEstablishment] = useState("");
+  const [bldg, setBldg] = useState("");
+  const [street, setStreet] = useState("");
+  const [brgy, setBrgy] = useState("");
+  const [zipcode, setZipcode] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
+  const [badge, setBadge] = useState("");
+  const [certificate, setCertificate] = useState("");
+  const [badgeName, setBadgeName] = useState("");
+  const [badgeDescription, setBadgeDescription] = useState("");
+  const [badgeImageUrl, setBadgeImageUrl] = useState("");
 
   // If user unchecks "Ends on the same day?", disable and uncheck "Whole day"
   const handleSameDayChange = () => {
@@ -14,6 +40,72 @@ export default function CreateEventModal({ open, onClose }) {
       return !prev;
     });
   };
+
+  // Helper: convert date and time to IC time (nanoseconds since epoch)
+  function toICTime(date, time) {
+    if (!date) return 0;
+    const d = new Date(date + (time ? `T${time}` : "T00:00"));
+    return BigInt(d.getTime()) * 1000000n;
+  }
+
+  // Handle form submit
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    setLoading(true);
+    try {
+      // Build payload matching Types.EventProfile
+      const payload = {
+        event_name: eventName,
+        event_description: description,
+        event_date: toICTime(startDate, startTime),
+        event_end_date: toICTime(endDate, endTime),
+        event_mode:
+          location === "onsite"
+            ? { Physical: null }
+            : location === "virtual"
+              ? { Virtual: null }
+              : { Hybrid: null },
+        event_location:
+          location === "onsite" || location === "hybrid"
+            ? [{
+              establishment: establishment ? [establishment] : [],
+              bldg: bldg ? [bldg] : [],
+              street: street ? [street] : [],
+              brgy: brgy ? [brgy] : [],
+              zipcode: zipcode ? [zipcode] : [],
+              city: city || "",
+              country: country || ""
+            }]
+            : [],
+        virtual_link: virtualLink ? [virtualLink] : [],
+        registration_start: toICTime(startDate, startTime),
+        registration_end: endDate ? toICTime(endDate, endTime) : toICTime(startDate, endTime),
+        max_attendees: maxAttendees ? [parseInt(maxAttendees)] : [],
+        tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
+        requirements: [],
+        image_url: [],
+        event_detail: details,
+        badge: {
+          name: badgeName,
+          description: badgeDescription,
+          image_url: badgeImageUrl ? [badgeImageUrl] : [],
+        },
+      };
+      // Call backend
+      const eventId = await actor.submitEvent(payload);
+      setSuccess("Event created! ID: " + eventId);
+      setTimeout(() => {
+        setSuccess("");
+        onClose();
+      }, 1200);
+    } catch (err) {
+      setError(err.message || "Failed to create event");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   if (!open) return null;
   return (
@@ -37,7 +129,10 @@ export default function CreateEventModal({ open, onClose }) {
             &times;
           </button>
         </div>
-        <form>
+        <form onSubmit={handleSubmit}>
+          {/* Show error/success */}
+          {error && <div className="mb-2 text-red-600">{error}</div>}
+          {success && <div className="mb-2 text-green-600">{success}</div>}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Left Column */}
             <div>
@@ -50,6 +145,9 @@ export default function CreateEventModal({ open, onClose }) {
                   className="w-full border rounded px-3 py-2 bg-gray-50 text-base"
                   placeholder="Enter event name"
                   maxLength={100}
+                  value={eventName}
+                  onChange={(e) => setEventName(e.target.value)}
+                  required
                 />
               </div>
               {/* Upload Photos / Videos */}
@@ -85,9 +183,11 @@ export default function CreateEventModal({ open, onClose }) {
                   placeholder="Enter Description"
                   rows={2}
                   maxLength={1000}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
                 <div className="text-xs text-gray-400 text-right mt-1">
-                  0/1000
+                  {description.length}/1000
                 </div>
               </div>
               {/* Date and Time */}
@@ -101,6 +201,9 @@ export default function CreateEventModal({ open, onClose }) {
                     <input
                       type="date"
                       className="w-full border rounded px-3 py-2 bg-gray-50"
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      required
                     />
                   </div>
                   {!sameDay && (
@@ -111,6 +214,9 @@ export default function CreateEventModal({ open, onClose }) {
                       <input
                         type="date"
                         className="w-full border rounded px-3 py-2 bg-gray-50"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        required
                       />
                     </div>
                   )}
@@ -138,8 +244,9 @@ export default function CreateEventModal({ open, onClose }) {
                       type="time"
                       className="w-full border rounded px-3 py-2 bg-gray-50"
                       disabled={wholeDay}
-                      value={wholeDay ? "00:00" : undefined}
-                      onChange={() => {}}
+                      value={startTime}
+                      onChange={(e) => setStartTime(e.target.value)}
+                      required={!wholeDay}
                     />
                   </div>
                   <div className="flex-1">
@@ -150,8 +257,9 @@ export default function CreateEventModal({ open, onClose }) {
                       type="time"
                       className="w-full border rounded px-3 py-2 bg-gray-50"
                       disabled={wholeDay}
-                      value={wholeDay ? "23:59" : undefined}
-                      onChange={() => {}}
+                      value={endTime}
+                      onChange={(e) => setEndTime(e.target.value)}
+                      required={!wholeDay}
                     />
                   </div>
                 </div>
@@ -166,9 +274,8 @@ export default function CreateEventModal({ open, onClose }) {
                   />
                   <label
                     htmlFor="whole-day"
-                    className={`text-xs ${
-                      !sameDay ? "text-gray-400" : "text-gray-600"
-                    }`}
+                    className={`text-xs ${!sameDay ? "text-gray-400" : "text-gray-600"
+                      }`}
                   >
                     Whole day?
                   </label>
@@ -217,12 +324,14 @@ export default function CreateEventModal({ open, onClose }) {
                   <label className="block font-medium mb-1 text-sm">
                     Max Attendees <span className="text-red-500">*</span>
                   </label>
-                  <select className="w-full border rounded px-3 py-2 bg-gray-50 text-base">
-                    <option>Unlimited</option>
-                    {[10, 20, 50, 100, 200, 500].map((n) => (
-                      <option key={n}>{n}</option>
-                    ))}
-                  </select>
+                  <input
+                    type="number"
+                    className="w-full border rounded px-3 py-2 bg-gray-50 text-base"
+                    placeholder="e.g. 100"
+                    value={maxAttendees}
+                    onChange={(e) => setMaxAttendees(e.target.value)}
+                    min={1}
+                  />
                 </div>
               </div>
 
@@ -235,6 +344,8 @@ export default function CreateEventModal({ open, onClose }) {
                   <input
                     className="w-full border rounded px-3 py-2"
                     placeholder="Enter virtual link"
+                    value={virtualLink}
+                    onChange={(e) => setVirtualLink(e.target.value)}
                   />
                 </div>
               )}
@@ -243,12 +354,13 @@ export default function CreateEventModal({ open, onClose }) {
                 <>
                   <div className="mb-3">
                     <label className="block font-medium mb-1 text-sm">
-                      Establishment Name / House No. & Street{" "}
-                      <span className="text-red-500">*</span>
+                      Establishment Name / House No. & Street <span className="text-red-500">*</span>
                     </label>
                     <input
                       className="w-full border rounded px-3 py-2 bg-gray-50 text-base"
                       placeholder="Enter establishment name / house no. & street"
+                      value={establishment}
+                      onChange={e => setEstablishment(e.target.value)}
                     />
                   </div>
                   <div className="mb-3">
@@ -258,44 +370,100 @@ export default function CreateEventModal({ open, onClose }) {
                     <input
                       className="w-full border rounded px-3 py-2 bg-gray-50 text-base"
                       placeholder="Enter building / floor / unit number"
+                      value={bldg}
+                      onChange={e => setBldg(e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="block font-medium mb-1 text-sm">
+                      Street
+                    </label>
+                    <input
+                      className="w-full border rounded px-3 py-2 bg-gray-50 text-base"
+                      placeholder="Enter street"
+                      value={street}
+                      onChange={e => setStreet(e.target.value)}
                     />
                   </div>
                   <div className="mb-3">
                     <label className="block font-medium mb-1 text-sm">
                       Barangay <span className="text-red-500">*</span>
                     </label>
-                    <select className="w-full border rounded px-3 py-2 bg-gray-50 text-base">
-                      <option>Choose barangay</option>
-                      <option>Sample Barangay 1</option>
-                      <option>Sample Barangay 2</option>
-                    </select>
+                    <input
+                      className="w-full border rounded px-3 py-2 bg-gray-50 text-base"
+                      placeholder="Enter barangay"
+                      value={brgy}
+                      onChange={e => setBrgy(e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="block font-medium mb-1 text-sm">
+                      Zipcode
+                    </label>
+                    <input
+                      className="w-full border rounded px-3 py-2 bg-gray-50 text-base"
+                      placeholder="Enter zipcode"
+                      value={zipcode}
+                      onChange={e => setZipcode(e.target.value)}
+                    />
                   </div>
                   <div className="flex gap-2 mb-3">
                     <div className="flex-1">
                       <label className="block font-medium mb-1 text-sm">
                         City <span className="text-red-500">*</span>
                       </label>
-                      <select className="w-full border rounded px-3 py-2 bg-gray-50 text-base">
-                        <option>Choose city</option>
-                        <option>Quezon City</option>
-                        <option>Makati</option>
-                      </select>
+                      <input
+                        className="w-full border rounded px-3 py-2 bg-gray-50 text-base"
+                        placeholder="Enter city"
+                        value={city}
+                        onChange={e => setCity(e.target.value)}
+                      />
                     </div>
                     <div className="flex-1">
                       <label className="block font-medium mb-1 text-sm">
-                        Province <span className="text-red-500">*</span>
+                        Country <span className="text-red-500">*</span>
                       </label>
-                      <select className="w-full border rounded px-3 py-2 bg-gray-50 text-base">
-                        <option>Choose province</option>
-                        <option>Metro Manila</option>
-                        <option>Cavite</option>
-                      </select>
+                      <input
+                        className="w-full border rounded px-3 py-2 bg-gray-50 text-base"
+                        placeholder="Enter country"
+                        value={country}
+                        onChange={e => setCountry(e.target.value)}
+                      />
                     </div>
                   </div>
                 </>
               )}
 
-              {/* ...other fields... */}
+              {/* Badge Fields */}
+              <div className="mb-3">
+                <label className="block font-medium mb-1 text-sm">Badge Name <span className="text-red-500">*</span></label>
+                <input
+                  className="w-full border rounded px-3 py-2 bg-gray-50 text-base"
+                  placeholder="Enter badge name"
+                  value={badgeName}
+                  onChange={e => setBadgeName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label className="block font-medium mb-1 text-sm">Badge Description <span className="text-red-500">*</span></label>
+                <textarea
+                  className="w-full border rounded px-3 py-2 bg-gray-50 text-base"
+                  placeholder="Enter badge description"
+                  value={badgeDescription}
+                  onChange={e => setBadgeDescription(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label className="block font-medium mb-1 text-sm">Badge Image URL</label>
+                <input
+                  className="w-full border rounded px-3 py-2 bg-gray-50 text-base"
+                  placeholder="Enter badge image URL (optional)"
+                  value={badgeImageUrl}
+                  onChange={e => setBadgeImageUrl(e.target.value)}
+                />
+              </div>
             </div>
 
             {/* Right Column */}
@@ -311,6 +479,8 @@ export default function CreateEventModal({ open, onClose }) {
                 <input
                   className="w-full border rounded px-3 py-2 bg-gray-50 text-base"
                   placeholder="Tags"
+                  value={tags}
+                  onChange={(e) => setTags(e.target.value)}
                 />
               </div>
               {/* Details */}
@@ -323,6 +493,8 @@ export default function CreateEventModal({ open, onClose }) {
                   rows={6}
                   placeholder="Enter event details"
                   maxLength={10000}
+                  value={details}
+                  onChange={(e) => setDetails(e.target.value)}
                 />
                 <div className="flex justify-between items-center mt-1 text-xs text-gray-400">
                   <span>
@@ -340,7 +512,7 @@ export default function CreateEventModal({ open, onClose }) {
                       U
                     </button>
                   </span>
-                  <span>0/10000</span>
+                  <span>{details.length}/10000</span>
                 </div>
               </div>
               {/* Attachment */}
@@ -375,10 +547,10 @@ export default function CreateEventModal({ open, onClose }) {
                   </label>
                   <div className="flex gap-3 mt-1">
                     <label className="flex items-center gap-1 text-sm">
-                      <input type="radio" name="reward" /> Certificate
+                      <input type="radio" name="reward" value="certificate" checked={badge === "certificate"} onChange={() => setBadge("certificate")} /> Certificate
                     </label>
                     <label className="flex items-center gap-1 text-sm">
-                      <input type="radio" name="reward" /> Badge
+                      <input type="radio" name="reward" value="badge" checked={badge === "badge"} onChange={() => setBadge("badge")} /> Badge
                     </label>
                   </div>
                 </div>
@@ -416,8 +588,9 @@ export default function CreateEventModal({ open, onClose }) {
             <button
               type="submit"
               className="px-6 py-2 rounded bg-blue-600 text-white text-base font-semibold shadow hover:bg-blue-700"
+              disabled={loading}
             >
-              Create Event <span className="ml-1">✓</span>
+              {loading ? "Creating..." : "Create Event"} <span className="ml-1">✓</span>
             </button>
           </div>
         </form>
