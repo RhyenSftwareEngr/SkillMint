@@ -6,19 +6,17 @@ import {
 } from "../../../declarations/skillmint_backend_main";
 import { useNavigate } from "react-router-dom";
 import NavBarLandingPage from "../components/NavBarLandingPage";
+import { useAuth } from "../context/AuthContext";
 
 export default function LandingPage() {
+  const { login, isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
-  const [authClient, setAuthClient] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    AuthClient.create().then(async (client) => {
-      setAuthClient(client);
-      const loggedIn = await client.isAuthenticated();
-      setIsAuthenticated(loggedIn);
-    });
-  }, []);
+    if (!loading && isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, loading, navigate]);
 
   const handleLogin = async () => {
     if (!authClient) return;
@@ -79,7 +77,7 @@ export default function LandingPage() {
           </p>
           <button
             className="bg-white text-black font-semibold px-8 py-3 rounded-full shadow hover:bg-gray-100 transition"
-            onClick={handleLogin}
+            onClick={login}
           >
             Join Us
           </button>
@@ -172,7 +170,7 @@ export default function LandingPage() {
         </p>
         <button
           className="px-8 py-3 rounded-full bg-[#002e5b] text-white font-semibold shadow hover:bg-blue-700 transition"
-          onClick={handleLogin}
+          onClick={login}
         >
           Join SkillMint
         </button>

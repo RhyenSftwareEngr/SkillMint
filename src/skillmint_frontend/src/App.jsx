@@ -1,22 +1,26 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
-import DashboardPage from "./pages/DashboardPage";
+import { DashboardPageWithProtection } from "./pages/DashboardPage";
 import EventDetailsPage from "./pages/EventDetailsPage";
 import CreatedEventDetailsPage from "./pages/CreatedEventDetailsPage"; // new!
+import MintaroChatbotLauncher from "./components/MintaroChatbotLauncher";
 
 export default function App() {
   return (
-    <div className="w-full min-h-screen overflow-x-hidden">
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/event/:id" element={<EventDetailsPage />} />
-        <Route
-          path="/created-event/:id"
-          element={<CreatedEventDetailsPage />}
-        />
-      </Routes>
-    </div>
+    <>
+      <div className="w-full min-h-screen overflow-x-hidden">
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/dashboard" element={<DashboardPageWithProtection />} />
+          <Route path="/event/:id" element={<EventDetailsPage />} />
+          <Route
+            path="/created-event/:id"
+            element={<CreatedEventDetailsPage />}
+          />
+        </Routes>
+      </div>
+      <MintaroChatbotLauncher />
+    </>
   );
 }

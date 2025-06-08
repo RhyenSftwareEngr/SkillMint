@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
+import CreateUserForm from "./CreateUserForm";
 
 // Dummy data for badges, events, and certs
 const badges = Array.from({ length: 8 });
@@ -7,6 +9,23 @@ const certifications = Array.from({ length: 2 });
 
 export default function ProfileDrawer({ open, onClose }) {
   const [editMode, setEditMode] = useState(false);
+  const { actor } = useAuth();
+  const [userProfile, setUserProfile] = useState(null);
+  const [showCreate, setShowCreate] = useState(false);
+
+  useEffect(() => {
+    if (open && actor) {
+      actor.getUserInfo()
+        .then((info) => {
+          if (!info.profile) setShowCreate(true);
+          else {
+            setUserProfile(info.profile);
+            setShowCreate(false);
+          }
+        })
+        .catch(() => setShowCreate(true));
+    }
+  }, [open, actor]);
 
   // Lock body scroll when open
   useEffect(() => {
@@ -19,11 +38,10 @@ export default function ProfileDrawer({ open, onClose }) {
     <>
       {/* Overlay */}
       <div
-        className={`fixed inset-0 bg-black bg-opacity-30 transition-opacity duration-300 z-40 ${
-          open
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 bg-black bg-opacity-30 transition-opacity duration-300 z-40 ${open
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
+          }`}
         onClick={onClose}
       />
       {/* Drawer */}
@@ -35,17 +53,24 @@ export default function ProfileDrawer({ open, onClose }) {
           ${open ? "translate-x-0" : "translate-x-full"}
         `}
       >
-        {editMode ? (
+        {showCreate ? (
+          <div className="flex-1 flex flex-col justify-center items-center">
+            <div className="p-6">
+              <h2 className="text-xl font-bold mb-4 text-center">Create your SkillMint Profile</h2>
+              <CreateUserForm onSuccess={() => setShowCreate(false)} />
+            </div>
+          </div>
+        ) : editMode ? (
           <ProfileEditForm onCancel={() => setEditMode(false)} />
         ) : (
-          <ProfileView onEdit={() => setEditMode(true)} onClose={onClose} />
+          <ProfileView userProfile={userProfile} onEdit={() => setEditMode(true)} onClose={onClose} />
         )}
       </div>
     </>
   );
 }
 
-function ProfileView({ onEdit, onClose }) {
+function ProfileView({ userProfile, onEdit, onClose }) {
   return (
     <div className="flex flex-col h-full">
       {/* Banner and Avatar */}
@@ -57,11 +82,15 @@ function ProfileView({ onEdit, onClose }) {
           className="w-full h-28 object-cover rounded-t-2xl"
         />
         {/* Avatar */}
-        <img
-          src="https://randomuser.me/api/portraits/women/65.jpg"
-          alt="avatar"
-          className="w-24 h-24 rounded-full border-4 border-white shadow-lg absolute left-1/2 top-16 -translate-x-1/2"
-        />
+        {userProfile && userProfile.profile_image && userProfile.profile_image.length > 0 ? (
+          <img
+            src={userProfile.profile_image[0]}
+            alt="avatar"
+            className="w-24 h-24 rounded-full border-4 border-white shadow-lg absolute left-1/2 top-16 -translate-x-1/2 object-cover"
+          />
+        ) : (
+          <div className="w-24 h-24 rounded-full bg-gray-300 border-4 border-white shadow-lg absolute left-1/2 top-16 -translate-x-1/2" />
+        )}
         {/* Close button */}
         <button
           onClick={onClose}
@@ -75,9 +104,19 @@ function ProfileView({ onEdit, onClose }) {
       {/* Info */}
       <div className="flex flex-col items-center mt-16 px-6 pb-4">
         <div className="font-bold text-xl mb-1 flex items-center gap-1">
-          Angela Tallon <span>👩‍💻🎓</span>
+          {userProfile ? (
+            <>
+              {userProfile.first_name} {userProfile.last_name}
+            </>
+          ) : (
+            <span>Loading...</span>
+          )}
         </div>
-        <div className="text-gray-500 text-sm mb-2">Quezon City University</div>
+        <div className="text-gray-500 text-sm mb-2">
+          {userProfile && userProfile.affiliation && userProfile.affiliation.length > 0
+            ? userProfile.affiliation.join(", ")
+            : ""}
+        </div>
         <div className="flex gap-2 mb-2">
           <button className="text-xs bg-blue-100 text-blue-700 rounded px-3 py-1 hover:bg-blue-200">
             Export Profile
@@ -90,18 +129,50 @@ function ProfileView({ onEdit, onClose }) {
           </button>
         </div>
         <p className="text-gray-700 text-center my-3 text-sm">
-          I am a roblox addict. Lorem ipsum dolor sit amet, consectetur
-          adipiscing elit, sed do eiusmod tempor incididunt ut labore et.
+          {userProfile && userProfile.bio && userProfile.bio.length > 0
+            ? userProfile.bio[0]
+            : ""}
         </p>
         {/* Contact */}
         <div className="flex flex-col items-center gap-1 text-xs mb-2">
-          <span className="flex items-center gap-1">
-            <span>📧</span>robots.garage@gmail.com
-          </span>
-          <span className="flex items-center gap-1">
-            <span>🔗</span>github.com/excel_tahe
-          </span>
+          {userProfile && userProfile.email && (
+            <span className="flex items-center gap-1">
+              <span>📧</span>{userProfile.email}
+            </span>
+          )}
+          {userProfile && userProfile.phone && (
+            <span className="flex items-center gap-1">
+              <span>📞</span>{userProfile.phone}
+            </span>
+          )}
+          {userProfile && userProfile.social_links && userProfile.social_links.length > 0 && userProfile.social_links.map((s, i) => (
+            <span key={i} className="flex items-center gap-1">
+              <span>🔗</span>
+              <a href={s.url} target="_blank" rel="noopener noreferrer" className="underline text-blue-600">{s.platform}</a>
+            </span>
+          ))}
         </div>
+        {/* Location */}
+        {userProfile && userProfile.location && userProfile.location.length > 0 && (
+          <div className="text-xs text-gray-600 text-center mb-2">
+            {userProfile.location[0].establishment ? userProfile.location[0].establishment[0] + ", " : ""}
+            {userProfile.location[0].bldg ? userProfile.location[0].bldg[0] + ", " : ""}
+            {userProfile.location[0].street ? userProfile.location[0].street[0] + ", " : ""}
+            {userProfile.location[0].brgy ? userProfile.location[0].brgy[0] + ", " : ""}
+            {userProfile.location[0].city}, {userProfile.location[0].country}
+            {userProfile.location[0].zipcode ? ", " + userProfile.location[0].zipcode[0] : ""}
+          </div>
+        )}
+        {/* Skills */}
+        {userProfile && userProfile.skills && userProfile.skills.length > 0 && (
+          <div className="flex flex-wrap gap-1 justify-center mb-2">
+            {userProfile.skills.map((skill, i) => (
+              <span key={i} className="bg-gray-200 rounded px-2 py-0.5 text-xs">
+                {skill}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Sections */}

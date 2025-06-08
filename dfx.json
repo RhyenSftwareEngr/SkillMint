@@ -15,20 +15,44 @@
     },
     "skillmint_backend_main": {
       "type": "motoko",
-      "main": "src/skillmint_backend/main.mo"
+      "main": "src/skillmint_backend/main.mo",
+      "http_outcalls": {
+        "enabled": true
+      },
+      "dependencies": [
+        "llm"
+      ]
     },
     "skillmint_frontend": {
-      "dependencies": ["skillmint_backend_main"],
-      "source": ["src/skillmint_frontend/dist"],
+      "dependencies": [
+        "skillmint_backend_main"
+      ],
+      "source": [
+        "src/skillmint_frontend/dist"
+      ],
       "type": "assets",
       "workspace": "skillmint_frontend"
+    },
+    "llm": {
+      "candid": "https://github.com/dfinity/llm/releases/latest/download/llm-canister-ollama.did",
+      "type": "custom",
+      "specified_id": "w36hm-eqaaa-aaaal-qr76a-cai",
+      "remote": {
+        "id": {
+          "ic": "w36hm-eqaaa-aaaal-qr76a-cai",
+          "playgroud": "w36hm-eqaaa-aaaal-qr76a-cai"
+        }
+      },
+      "wasm": "https://github.com/dfinity/llm/releases/latest/download/llm-canister-ollama.wasm"
     }
   },
   "defaults": {
     "bitcoin": {
       "enabled": true,
       "log_level": "info",
-      "nodes": ["127.0.0.1:18444"]
+      "nodes": [
+        "127.0.0.1:18444"
+      ]
     },
     "build": {
       "args": "",

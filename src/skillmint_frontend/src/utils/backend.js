@@ -2,6 +2,8 @@ import { HttpAgent, Actor } from "@dfinity/agent";
 import { idlFactory as backendIdlFactory } from "../../../declarations/skillmint_backend_main";
 import { idlFactory as llmIdlFactory } from "../../../declarations/llm";
 
+// WARNING: Use this backend actor everywhere in the frontend for consistent canister calls and error handling.
+
 // Canister IDs from environment
 const backendCanisterId = process.env.CANISTER_ID_SKILLMINT_BACKEND_MAIN;
 const llmCanisterId = process.env.CANISTER_ID_LLM;
@@ -32,3 +34,8 @@ function createActor(canisterId, idlFactory) {
 // Export named actors
 export const backend = createActor(backendCanisterId, backendIdlFactory);
 export const llm = createActor(llmCanisterId, llmIdlFactory);
+
+// Helper to get a single event by ID
+export async function getEventInfo(id) {
+  return backend.getEvent(id);
+}
