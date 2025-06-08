@@ -1,4 +1,4 @@
-import Types "types";
+import file_types "types";
 import Principal "mo:base/Principal";
 import Nat "mo:base/Nat";
 import Time "mo:base/Time";
@@ -11,17 +11,17 @@ import Order "mo:base/Order";
 import Blob "mo:base/Blob";
 
 actor Main {
-  stable var users : [Types.User] = [];
-  stable var events : [Types.Event] = [];
+  stable var users : [file_types.User] = [];
+  stable var events : [file_types.Event] = [];
   stable var next_event_id : Nat = 1;
   stable var files : [Types.File] = [];
   stable var next_file_id : Nat = 0;
 
   // Add a new event
-  public func addEvent(profile : Types.EventProfile) : async Nat {
+  public func addEvent(profile : file_types.EventProfile) : async Nat {
     let id = next_event_id;
     next_event_id += 1;
-    let event : Types.Event = {
+    let event : file_types.Event = {
       id = id;
       info = {
         profile = profile;
@@ -32,34 +32,34 @@ actor Main {
         updated_at = Time.now();
       };
     };
-    events := Array.append<Types.Event>(events, [event]);
+    events := Array.append<file_types.Event>(events, [event]);
     return id;
   };
 
   // Get all events
-  public query func getEvents() : async [Types.Event] {
+  public query func getEvents() : async [file_types.Event] {
     return events;
   };
 
   // Get a single event by ID
-  public query func getEvent(id : Nat) : async ?Types.Event {
-    Array.find<Types.Event>(events, func(e) = e.id == id);
+  public query func getEvent(id : Nat) : async ?file_types.Event {
+    Array.find<file_types.Event>(events, func(e) = e.id == id);
   };
 
   // Get 15 upcoming events, sorted by event_date
-  public query func getUpcomingEvents() : async [Types.Event] {
-    let sorted : [Types.Event] = Array.sort<Types.Event>(
+  public query func getUpcomingEvents() : async [file_types.Event] {
+    let sorted : [file_types.Event] = Array.sort<file_types.Event>(
       events,
-      func(a : Types.Event, b : Types.Event) : Order.Order {
+      func(a : file_types.Event, b : file_types.Event) : Order.Order {
         Int.compare(a.info.profile.event_date, b.info.profile.event_date);
       },
     );
-    return Array.take<Types.Event>(sorted, 15);
+    return Array.take<file_types.Event>(sorted, 15);
   };
 
   // Add a new user
-  public func addUser(principal : Principal, profile : Types.UserProfile) : async () {
-    let user : Types.User = {
+  public func addUser(principal : Principal, profile : file_types.UserProfile) : async () {
+    let user : file_types.User = {
       principal = principal;
       info = {
         profile = profile;
@@ -70,23 +70,23 @@ actor Main {
         updated_at = Time.now();
       };
     };
-    users := Array.append<Types.User>(users, [user]);
+    users := Array.append<file_types.User>(users, [user]);
   };
 
   // Get all users
-  public query func getUsers() : async [Types.User] {
+  public query func getUsers() : async [file_types.User] {
     return users;
   };
 
   // Get a single user by principal
-  public query func getUser(principal : Principal) : async ?Types.User {
-    Array.find<Types.User>(users, func(u) = u.principal == principal);
+  public query func getUser(principal : Principal) : async ?file_types.User {
+    Array.find<file_types.User>(users, func(u) = u.principal == principal);
   };
 
   // Update a user's profile
-  public func updateUserProfile(principal : Principal, profile : Types.UserProfile) : async Bool {
+  public func updateUserProfile(principal : Principal, profile : file_types.UserProfile) : async Bool {
     var updated = false;
-    users := Array.map<Types.User, Types.User>(
+    users := Array.map<file_types.User, file_types.User>(
       users,
       func(u) {
         if (u.principal == principal) {
@@ -127,7 +127,7 @@ actor Main {
   public func addDemoEvents() : async () {
     let now = Time.now();
     let day = 86400_000_000_000;
-    let demoEvents : [Types.EventProfile] = [
+    let demoEvents : [file_types.EventProfile] = [
       {
         event_name = "Hackathon – Philippine Blockchain Week 2025";
         event_description = "The premier blockchain hackathon in the Philippines.";
@@ -156,6 +156,16 @@ actor Main {
         };
         banner_image = ?"https://images.unsplash.com/photo-1461749280684-dccba630e2f6";
         attachments = [
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
           {
             name = "Hackathon_Rules.pdf";
             url = ?"https://example.com/Hackathon_Rules.pdf";
@@ -198,8 +208,19 @@ actor Main {
             url = ?"https://example.com/Schedule.xlsx";
             file_type = "xlsx";
           }
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
         ];
       },
+
 
       {
         event_name = "AI for Good Summit";
@@ -229,6 +250,16 @@ actor Main {
         };
         banner_image = ?"https://images.unsplash.com/photo-1465101178521-c1a9136a3b99";
         attachments = [
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
           {
             name = "Hackathon_Rules.pdf";
             url = ?"https://example.com/Hackathon_Rules.pdf";
@@ -279,6 +310,16 @@ actor Main {
             url = ?"https://example.com/Schedule.xlsx";
             file_type = "xlsx";
           }
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
         ];
       },
       {
@@ -319,6 +360,16 @@ actor Main {
             url = ?"https://example.com/Schedule.xlsx";
             file_type = "xlsx";
           }
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
         ];
       },
       {
@@ -341,6 +392,16 @@ actor Main {
         };
         banner_image = ?"https://images.unsplash.com/photo-1507358522600-9f71e620c44e";
         attachments = [
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
           {
             name = "Hackathon_Rules.pdf";
             url = ?"https://example.com/Hackathon_Rules.pdf";
@@ -391,6 +452,16 @@ actor Main {
             url = ?"https://example.com/Schedule.xlsx";
             file_type = "xlsx";
           }
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
         ];
       },
       {
@@ -431,6 +502,16 @@ actor Main {
             url = ?"https://example.com/Schedule.xlsx";
             file_type = "xlsx";
           }
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
         ];
       },
       {
@@ -461,6 +542,16 @@ actor Main {
         };
         banner_image = ?"https://images.unsplash.com/photo-1519389950473-47ba0277781c";
         attachments = [
+          {
+            name = "Hackathon_Rules.pdf";
+            url = ?"https://example.com/Hackathon_Rules.pdf";
+            file_type = "pdf";
+          },
+          {
+            name = "Schedule.xlsx";
+            url = ?"https://example.com/Schedule.xlsx";
+            file_type = "xlsx";
+          }
           {
             name = "Hackathon_Rules.pdf";
             url = ?"https://example.com/Hackathon_Rules.pdf";

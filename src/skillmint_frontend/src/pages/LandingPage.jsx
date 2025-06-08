@@ -4,19 +4,42 @@ import {
   createActor,
   canisterId,
 } from "../../../declarations/skillmint_backend_main";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; 
 import NavBarLandingPage from "../components/NavBarLandingPage";
 import { useAuth } from "../context/AuthContext";
+import { backend } from "../utils/backend";
 
 export default function LandingPage() {
-  const { login, isAuthenticated, loading } = useAuth();
+  const { login, isAuthenticated, loading, userExists } = useAuth();
   const navigate = useNavigate();
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
 
   useEffect(() => {
     if (!loading && isAuthenticated) {
       navigate("/dashboard");
     }
   }, [isAuthenticated, loading, navigate]);
+
+  useEffect(() => {
+    if (userExists === false) {
+      setProfileModalOpen(true);
+    }
+  }, [userExists]);
+
+  useEffect(() => {
+    if (backend && isAuthenticated) {
+      console.log("Checking user existence...");
+      backend.userExist && backend.userExist()
+        .then(result => {
+          console.log("userExist result:", result);
+          setUserExists(result);
+        })
+        .catch(err => {
+          console.error("userExist error:", err);
+          setUserExists(false);
+        });
+    }
+  }, [backend, isAuthenticated]);
 
   const handleLogin = async () => {
     if (!authClient) return;
@@ -182,8 +205,7 @@ export default function LandingPage() {
           <div>
             <img src="/logo.png" alt="logo" className="w-10 mb-3" />
             <p className="text-sm">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            SkillMint provides a platform for ICT students to showcase their skills and connect with other students and organizations.
             </p>
           </div>
           <div>

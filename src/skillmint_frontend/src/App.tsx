@@ -1,5 +1,5 @@
-import MintaroChatbotLauncher from "./components/MintaroChatbotLauncher";
+import SkillMintChatbotLauncher from "./components/SkillMintChatbotLauncher";
 
 export default function App() {
-    return <MintaroChatbotLauncher />;
+    return <SkillMintChatbotLauncher />;
 } 

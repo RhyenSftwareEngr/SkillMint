@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ReactMarkdown from "react-markdown";
 
 const GEMINI_API_URL =
     "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyAvRh1jKz0ogMtxt7SAiWaAAEKg7eksLdw";
@@ -65,20 +66,21 @@ export default function GeminiChatbot({ systemPrompt }: GeminiChatbotProps) {
 
     return (
         <div className="max-w-md mx-auto p-4 bg-white rounded shadow">
-            <h2 className="text-xl font-bold mb-2">Mentor Mintaro</h2>
+            <h2 className="text-xl font-bold mb-2">Mentor SkillMint</h2>
             <div className="h-64 overflow-y-auto border p-2 mb-2 bg-gray-50 rounded">
                 {messages.map((msg, i) => (
                     <div
                         key={i}
-                        className={`mb-2 ${msg.role === "user" ? "text-right" : "text-left text-blue-700"
-                            }`}
+                        className={`mb-2 ${msg.role === "user" ? "text-right" : "text-left text-blue-700"}`}
                     >
                         <span className="inline-block px-2 py-1 rounded bg-gray-200">
-                            <b>{msg.role === "user" ? "You" : "Gemini"}:</b> {msg.text}
+                            <b>{msg.role === "user" ? "You" : "SkillMint"}:</b> <span className="inline">
+                                <ReactMarkdown>{msg.text}</ReactMarkdown>
+                            </span>
                         </span>
                     </div>
                 ))}
-                {loading && <div className="text-gray-400">Gemini is typing...</div>}
+                {loading && <div className="text-gray-400">SkillMint is typing...</div>}
             </div>
             <div className="flex gap-2">
                 <input

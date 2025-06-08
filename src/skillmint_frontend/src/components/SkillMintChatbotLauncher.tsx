@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import GeminiChatbot from "./GeminiChatbot";
+import ReactMarkdown from "react-markdown";
 
 const SYSTEM_PROMPT = `You are an AI Agent for an application called SkillMint. You are a friendly and professional AI mentor integrated into the SkillMint platform. Your role is to assist users—primarily students, event organizers, beginners in tech, and professionals—with questions related to the platform and general educational guidance.
 
@@ -26,9 +26,13 @@ Other notes:
 - You are also given some general information of the user, including their name and their bio. Try to fit your answer accordingly
 `;
 
-export default function MintaroChatbotLauncher() {
+export default function SkillMintChatbotLauncher() {
     const [showChatbot, setShowChatbot] = useState(false);
     const [showBubble, setShowBubble] = useState(true);
+    const [messages, setMessages] = useState([
+        { role: "bot", text: "Hi, I'm SkillMint! How can I help you today?" }
+    ]);
+    const [input, setInput] = useState("");
 
     useEffect(() => {
         if (showBubble) {
@@ -36,6 +40,17 @@ export default function MintaroChatbotLauncher() {
             return () => clearTimeout(timer);
         }
     }, [showBubble]);
+
+    const handleSend = () => {
+        if (!input.trim()) return;
+        setMessages([...messages, { role: "user", text: input }]);
+        // For demo, echo the user's message as markdown
+        setMessages((msgs) => [
+            ...msgs,
+            { role: "bot", text: `**Echo:** ${input}` }
+        ]);
+        setInput("");
+    };
 
     return (
         <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 1000 }}>
@@ -58,7 +73,7 @@ export default function MintaroChatbotLauncher() {
                     }}
                     onClick={() => setShowBubble(false)}
                 >
-                    Hi, I'm Mintaro, your SkillMint guide.<br />Ready to help you grow anytime.
+                    Hi, I'm SkillMint, your SkillMint guide.<br />Ready to help you grow anytime.
                     <span
                         style={{
                             position: "absolute",
@@ -73,7 +88,7 @@ export default function MintaroChatbotLauncher() {
                     />
                 </div>
             )}
-            {/* Mintaro mascot button */}
+            {/* SkillMint mascot button */}
             <button
                 onClick={() => setShowChatbot((v) => !v)}
                 style={{
@@ -89,39 +104,43 @@ export default function MintaroChatbotLauncher() {
                     alignItems: "center",
                     justifyContent: "center"
                 }}
-                aria-label="Open Mintaro Chatbot"
+                aria-label="Open SkillMint Chatbot"
             >
                 <img
                     src="/logo.png"
-                    alt="Mintaro mascot"
+                    alt="SkillMint mascot"
                     style={{ width: 48, height: 48, objectFit: "contain" }}
                 />
             </button>
             {/* Chatbot modal/panel */}
             {showChatbot && (
-                <div
-                    style={{
-                        position: "fixed",
-                        bottom: 100,
-                        right: 24,
-                        zIndex: 1001,
-                        background: "white",
-                        borderRadius: 12,
-                        boxShadow: "0 4px 24px rgba(0,0,0,0.15)",
-                        width: 370,
-                        maxWidth: "90vw"
-                    }}
-                >
-                    <div className="flex justify-end p-2">
-                        <button
-                            onClick={() => setShowChatbot(false)}
-                            className="text-gray-400 hover:text-gray-700 text-xl font-bold"
-                            aria-label="Close Mintaro Chatbot"
-                        >
-                            ×
-                        </button>
+                <div className="fixed bottom-24 right-4 w-80 bg-white rounded-lg shadow-lg z-50 flex flex-col">
+                    <div className="flex justify-between items-center p-2 border-b">
+                        <span className="font-bold">SkillMint Chatbot</span>
+                        <button onClick={() => setShowChatbot(false)} aria-label="Close SkillMint Chatbot">×</button>
                     </div>
-                    <GeminiChatbot systemPrompt={SYSTEM_PROMPT} />
+                    <div className="flex-1 overflow-y-auto p-2" style={{ maxHeight: 320 }}>
+                        {messages.map((msg, i) => (
+                            <div key={i} className={msg.role === "user" ? "text-right mb-2" : "text-left mb-2"}>
+                                <span className={msg.role === "user" ? "font-semibold text-blue-600" : "font-semibold text-green-600"}>
+                                    {msg.role === "user" ? "You" : "SkillMint"}:
+                                </span>
+                                <span className={msg.role === "user" ? "inline ml-1" : "inline ml-1"}>
+                                    <ReactMarkdown>{msg.text}</ReactMarkdown>
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex border-t p-2">
+                        <input
+                            className="flex-1 border rounded px-2 py-1 mr-2"
+                            value={input}
+                            onChange={e => setInput(e.target.value)}
+                            onKeyDown={e => e.key === "Enter" && handleSend()}
+                            placeholder="Type your message... (Markdown supported)"
+                        />
+                        <button className="bg-blue-500 text-white px-3 py-1 rounded" onClick={handleSend}>Send</button>
+                    </div>
                 </div>
             )}
         </div>

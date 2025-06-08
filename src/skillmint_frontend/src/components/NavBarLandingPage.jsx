@@ -5,11 +5,11 @@ import {
   canisterId,
 } from "../../../declarations/skillmint_backend_main";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function NavBarLandingPage() {
   const navigate = useNavigate();
-  const [authClient, setAuthClient] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated, login } = useAuth();
 
   useEffect(() => {
     AuthClient.create().then(async (client) => {
@@ -69,11 +69,11 @@ export default function NavBarLandingPage() {
           </svg>
         </button>
         <button
-          className="px-5 py-2 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700"
-          onClick={handleLogin}
-        >
-          {isAuthenticated ? "Dashboard" : "Join Now"}
-        </button>
+      className="px-5 py-2 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700"
+      onClick={isAuthenticated ? () => navigate("/dashboard") : login}
+    >
+      {isAuthenticated ? "Dashboard" : "Join Now"}
+    </button>
       </div>
     </nav>
   );

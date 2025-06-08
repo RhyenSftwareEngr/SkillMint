@@ -51,13 +51,42 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (actor && isAuthenticated) {
-      actor.userExist && actor.userExist().then(setUserExists).catch(console.error);
+      console.log("[Dashboard] Checking if user exists...");
+      actor.userExist && actor.userExist().then((exists) => {
+        console.log("[Dashboard] userExist result:", exists);
+        setUserExists(exists);
+      }).catch((err) => {
+        console.error("[Dashboard] userExist error:", err);
+        setUserExists(false);
+      });
     }
   }, [actor, isAuthenticated]);
-
+  
   useEffect(() => {
-    if (userExists === true && actor) {
-      actor.getUserInfo().then((info) => setUserProfile(info.profile)).catch(console.error);
+    console.log("[Dashboard] userExists changed:", userExists);
+    if (userExists === false && actor) {
+      // Minimal profile creation logic
+      const defaultProfile = {
+        first_name: "New",
+        last_name: "User",
+        email: "",
+        phone: "",
+        bio: [],
+        skills: [],
+        social_links: [],
+        profile_image: [],
+        affiliation: [],
+        location: [],
+      };
+      console.log("[Dashboard] Creating user profile...");
+      actor.createUser(defaultProfile)
+        .then((result) => {
+          console.log("[Dashboard] createUser result:", result);
+          if (result[1] === "Created") {
+            setUserExists(true);
+          }
+        })
+        .catch(console.error);
     }
   }, [userExists, actor]);
 
@@ -70,6 +99,31 @@ export default function DashboardPage() {
   useEffect(() => {
     backend.getEvents().then(setAllEvents).catch(console.error);
   }, []);
+
+  useEffect(() => {
+    if (userExists === false && actor) {
+      // Minimal profile creation logic
+      const defaultProfile = {
+        first_name: "New",
+        last_name: "User",
+        email: "",
+        phone: "",
+        bio: [],
+        skills: [],
+        social_links: [],
+        profile_image: [],
+        affiliation: [],
+        location: [],
+      };
+      actor.createUser(defaultProfile)
+        .then((result) => {
+          if (result[1] === "Created") {
+            setUserExists(true);
+          }
+        })
+        .catch(console.error);
+    }
+  }, [userExists, actor]);
 
   if (loading || !actor) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>;
