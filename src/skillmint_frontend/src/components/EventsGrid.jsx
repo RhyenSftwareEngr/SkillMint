@@ -101,7 +101,7 @@ export default function EventsGrid({ onCreateEventClick, refreshSignal }) {
   return (
     <div className="bg-[#F4F8FB] w-full">
       <div className="w-full flex items-center justify-between mb-6 relative">
-        <h2 className="text-2xl font-bold">Events</h2>
+        <h2 className="text-2xl font-bold">All Events</h2>
         {/* Tabs */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex bg-gray-200 rounded-full p-1">
           <button

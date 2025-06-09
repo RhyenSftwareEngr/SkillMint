@@ -9,21 +9,26 @@ const certifications = Array.from({ length: 2 });
 
 export default function ProfileDrawer({ open, onClose }) {
   const [editMode, setEditMode] = useState(false);
-  const { actor } = useAuth();
-  const [userProfile, setUserProfile] = useState(null);
+  const { actor, userProfile } = useAuth();
   const [showCreate, setShowCreate] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (open && actor) {
-      actor.getUserInfo()
-        .then((info) => {
-          if (!info.profile) setShowCreate(true);
+      (async () => {
+        try {
+          const principal = await actor.agent.getPrincipal();
+          const user = await actor.getUser(principal);
+          if (!user || !user.info || !user.info.profile) setShowCreate(true);
           else {
-            setUserProfile(info.profile);
+            setUserProfile(user.info.profile);
             setShowCreate(false);
           }
-        })
-        .catch(() => setShowCreate(true));
+        } catch (e) {
+          setShowCreate(true);
+        }
+      })();
     }
   }, [open, actor]);
 
@@ -34,24 +39,30 @@ export default function ProfileDrawer({ open, onClose }) {
     return () => (document.body.style.overflow = "");
   }, [open]);
 
+  const handleCreateProfile = async () => {
+    if (!actor) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const principal = await actor.agent.getPrincipal();
+      await actor.addUser(principal, formData);
+      setShowCreate(false);
+      setUserProfile(formData);
+    } catch (e) {
+      console.error("[ProfileDrawer] Failed to create user:", e);
+      setError("Failed to create profile: " + (e.message || e));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <>
-      {/* Overlay */}
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 transition-opacity duration-300 ${open ? "visible opacity-100" : "invisible opacity-0"}`}
+    >
       <div
-        className={`fixed inset-0 bg-black bg-opacity-30 transition-opacity duration-300 z-40 ${open
-          ? "opacity-100 pointer-events-auto"
-          : "opacity-0 pointer-events-none"
-          }`}
-        onClick={onClose}
-      />
-      {/* Drawer */}
-      <div
-        className={`
-          fixed right-0 top-0 bottom-0 bg-white shadow-2xl z-50
-          transition-transform duration-300
-          w-full max-w-[420px] flex flex-col h-screen
-          ${open ? "translate-x-0" : "translate-x-full"}
-        `}
+        className="bg-white rounded-xl shadow-lg p-6 max-w-[95vw] max-h-[90vh] w-full overflow-y-auto overflow-x-auto"
+        style={{ minWidth: 320 }}
       >
         {showCreate ? (
           <div className="flex-1 flex flex-col justify-center items-center">
@@ -66,7 +77,7 @@ export default function ProfileDrawer({ open, onClose }) {
           <ProfileView userProfile={userProfile} onEdit={() => setEditMode(true)} onClose={onClose} />
         )}
       </div>
-    </>
+    </div>
   );
 }
 
@@ -179,16 +190,19 @@ function ProfileView({ userProfile, onEdit, onClose }) {
       <div className="flex-1 overflow-y-auto px-6 pb-6">
         {/* Badges */}
         <ProfileSection title="Badges" seeAll>
-          <div className="flex gap-2 flex-wrap">
-            {badges.map((_, i) => (
-              <div
-                key={i}
-                className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center text-xl shadow"
-              >
-                🏅
+          {userProfile && userProfile.info && userProfile.info.badges && userProfile.info.badges.length > 0 ? (
+            userProfile.info.badges.map((badgeObj, i) => (
+              <div key={i} className="flex items-center gap-2 mb-2">
+                <img src={badgeObj.badge.image_url} alt={badgeObj.badge.name} className="w-8 h-8 rounded-full border" />
+                <div>
+                  <div className="font-semibold">{badgeObj.badge.name}</div>
+                  <div className="text-xs text-gray-600">{badgeObj.badge.description}</div>
+                </div>
               </div>
-            ))}
-          </div>
+            ))
+          ) : (
+            <div className="text-gray-500 italic">No badges yet.</div>
+          )}
         </ProfileSection>
 
         {/* Attended Events */}

@@ -88,7 +88,7 @@ export default function LandingPage() {
         </div>
         <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-center items-center text-white text-center px-4">
           <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
-            SkillMInt
+            SkillMint
           </h1>
           <h2 className="text-2xl md:text-4xl font-semibold mb-4">
             Unleash Verified Talent

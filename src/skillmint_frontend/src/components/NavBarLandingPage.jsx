@@ -68,12 +68,14 @@ export default function NavBarLandingPage() {
             <path d="M21 21l-4.35-4.35" />
           </svg>
         </button>
-        <button
-      className="px-5 py-2 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700"
-      onClick={isAuthenticated ? () => navigate("/dashboard") : login}
-    >
-      {isAuthenticated ? "Dashboard" : "Join Now"}
-    </button>
+        {!isAuthenticated && (
+          <button
+            className="px-5 py-2 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700"
+            onClick={login}
+          >
+            Join Now
+          </button>
+        )}
       </div>
     </nav>
   );

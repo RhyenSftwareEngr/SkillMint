@@ -91,7 +91,7 @@ export default function Calendar({ events = [] }) {
                             className={`relative h-10 w-10 flex flex-col items-center justify-center rounded-lg cursor-pointer transition border border-transparent
                                 ${isToday ? 'bg-blue-100 border-blue-400 font-bold' : 'hover:bg-gray-100'}
                                 ${selectedDay === dateStr ? 'ring-2 ring-blue-400' : ''}
-                                ${hasEvent ? 'bg-yellow-100 border-yellow-400' : ''}`}
+                                ${hasEvent ? 'bg-yellow-300 border-yellow-600 shadow-lg' : ''}`}
                             onClick={hasEvent ? (e) => handleDayClick(e, dateStr, dayEvents) : undefined}
                             tabIndex={0}
                             title={hasEvent ? `${dayEvents.length} event(s)` : ''}

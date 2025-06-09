@@ -13,6 +13,7 @@ import CreateUserForm from "../components/CreateUserForm";
 import Calendar from "../components/Calendar";
 import Modal from "../components/Modal";
 import { backend } from "../utils/backend";
+import { Principal } from "@dfinity/principal";
 // import { toast } from "react-toastify";
 
 // const { auth } = useAuth();
@@ -48,6 +49,11 @@ export default function DashboardPage() {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [allEvents, setAllEvents] = useState([]);
   const [testModalOpen, setTestModalOpen] = useState(false);
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+
+  useEffect(() => {
+    backend.getUpcomingEvents().then(setUpcomingEvents).catch(console.error);
+  }, []);
 
   useEffect(() => {
     if (actor && isAuthenticated) {
@@ -125,9 +131,38 @@ export default function DashboardPage() {
     }
   }, [userExists, actor]);
 
+  useEffect(() => {
+    if (userExists === true && actor) {
+      (async () => {
+        const principal = await actor.agent.getPrincipal();
+        console.log("[Dashboard] Fetching user profile for principal:", principal.toText());
+        actor.getUser(principal)
+          .then((profile) => {
+            console.log("[Dashboard] getUser result:", profile);
+            setUserProfile(profile);
+          })
+          .catch((err) => {
+            console.error("[Dashboard] getUser error:", err);
+            setUserProfile(null);
+          });
+      })();
+    }
+  }, [userExists, actor]);
+
   if (loading || !actor) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>;
   }
+
+  const calendarUpcomingEvents = upcomingEvents.map(ev => {
+    const profile = ev.info?.profile || ev.profile || ev;
+    return {
+      ...ev,
+      startDate: new Date(Number(profile.event_date) / 1_000_000).toISOString().slice(0, 10),
+      endDate: new Date(Number(profile.event_date) / 1_000_000).toISOString().slice(0, 10),
+      title: profile.event_name,
+      description: profile.event_description,
+    };
+  });
 
   return (
     <div className="min-h-screen flex flex-col font-sans bg-[#E8E8E8] w-screen max-w-full">
@@ -139,7 +174,7 @@ export default function DashboardPage() {
             <LeftSidebar />
             <div className="bg-white rounded-lg shadow p-4">
               <h2 className="text-xl font-semibold mb-4">Calendar</h2>
-              <Calendar events={allEvents} />
+              <Calendar events={calendarUpcomingEvents} />
             </div>
           </aside>
           {/* Main Area */}
@@ -212,9 +247,7 @@ export default function DashboardPage() {
               </>
             )}
             {loading || userExists === null ? (
-              <div className="flex items-center gap-2 bg-gray-100 border-l-4 border-gray-400 text-gray-700 p-4 rounded mb-4">
-                <span>Checking your SkillMint profile status...</span>
-              </div>
+              null
             ) : null}
             {/* Right Column - Carousel and Events List */}
             <div className="flex flex-col gap-6">
@@ -223,7 +256,6 @@ export default function DashboardPage() {
                 <Carousel featuredEvents={allEvents.filter(ev => ev.info?.profile?.banner_image).slice(0, 1)} />
               </div>
               <div className="bg-white rounded-lg shadow p-4">
-                <h2 className="text-xl font-semibold mb-4">All Events</h2>
                 <EventsGrid onCreateEventClick={() => setCreateEventOpen(true)} />
               </div>
             </div>

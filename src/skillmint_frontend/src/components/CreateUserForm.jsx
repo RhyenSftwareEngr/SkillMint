@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 export default function CreateUserForm({ onSuccess }) {
-    const { actor } = useAuth();
+    const { actor, identity } = useAuth();
     const [form, setForm] = useState({
         first_name: "",
         last_name: "",
@@ -34,7 +34,7 @@ export default function CreateUserForm({ onSuccess }) {
     const handleSocialLinkChange = (i, field, value) => {
         const updated = form.social_links.map((s, idx) =>
             idx === i ? { ...s, [field]: value } : s
-        );
+        ); 
         setForm({ ...form, social_links: updated });
     };
 
@@ -78,15 +78,15 @@ export default function CreateUserForm({ onSuccess }) {
                     country: form.country,
                 }] : [],
             };
-            const result = await actor.createUser(profile);
-            if (result[1] === "Created") {
-                setSuccess("Profile created successfully!");
-                if (onSuccess) onSuccess();
-            } else if (result[1] === "Exist") {
-                setError("A profile already exists for this user.");
-            } else {
-                setError("Unknown response: " + result[1]);
+            if (!identity || !identity.getPrincipal) {
+                setError("User identity not found. Please log in again.");
+                setLoading(false);
+                return;
             }
+            const principal = identity.getPrincipal();
+            await actor.addUser(principal, profile);
+            setSuccess("Profile created successfully!");
+            if (onSuccess) onSuccess();
         } catch (err) {
             setError("Failed to create profile: " + (err.message || err));
         } finally {
@@ -96,7 +96,6 @@ export default function CreateUserForm({ onSuccess }) {
 
     return (
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow max-w-xl mx-auto mt-8">
-            <h2 className="text-xl font-bold mb-4">Create Your SkillMint Profile</h2>
             {error && <div className="mb-2 text-red-600">{error}</div>}
             {success && <div className="mb-2 text-green-600">{success}</div>}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

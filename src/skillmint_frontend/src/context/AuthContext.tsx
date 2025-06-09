@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { AuthClient } from "@dfinity/auth-client";
+import { HttpAgent } from "@dfinity/agent";
 import { createActor, canisterId } from '../../../declarations/skillmint_backend_main';
 
 interface AuthContextType {
@@ -7,6 +8,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   identity: any;
   actor: any;
+  userProfile: any;
   login: () => Promise<void>;
   logout: () => Promise<void>;
   loading: boolean;
@@ -23,7 +25,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [identity, setIdentity] = useState<any>(null);
   const [actor, setActor] = useState<any>(null);
+  const [userProfile, setUserProfile] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+
+  // Fetch user profile helper
+  const fetchUserProfile = async (act: any, id: any) => {
+    if (act && id) {
+      try {
+        const profile = await act.getUser(id.getPrincipal());
+        setUserProfile(profile);
+      } catch (e) {
+        setUserProfile(null);
+      }
+    }
+  };
 
   useEffect(() => {
     console.log("[AuthContext] Creating AuthClient...");
@@ -34,8 +49,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (loggedIn) {
         const id = client.getIdentity();
         setIdentity(id);
-        const act = createActor(canisterId, { agentOptions: { identity: id } });
+        const act = createActor(canisterId, { agentOptions: { identity: id, host: import.meta.env.VITE_DFX_NETWORK === "local" ? "http://localhost:4943" : "https://icp0.io" } });
         setActor(act);
+        await fetchUserProfile(act, id);
         console.log("[AuthContext] Created actor with principal:", id.getPrincipal().toText());
       }
       setLoading(false);
@@ -45,7 +61,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     console.log("[AuthContext] isAuthenticated changed:", isAuthenticated);
-  }, [isAuthenticated]);
+    if (isAuthenticated && actor && identity) {
+      fetchUserProfile(actor, identity);
+    }
+  }, [isAuthenticated, actor, identity]);
 
   const login = async () => {
     if (!authClient) return;
@@ -56,8 +75,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setIsAuthenticated(true);
         const id = authClient.getIdentity();
         setIdentity(id);
-        const act = createActor(canisterId, { agentOptions: { identity: id } });
+        const act = createActor(canisterId, { agentOptions: { identity: id, host: import.meta.env.VITE_DFX_NETWORK === "local" ? "http://localhost:4943" : "https://icp0.io" } });
         setActor(act);
+        await fetchUserProfile(act, id);
         console.log("[AuthContext] Login success. Principal:", id.getPrincipal().toText());
       },
       onError: (err: unknown) => {
@@ -72,11 +92,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setIsAuthenticated(false);
     setIdentity(null);
     setActor(null);
+    setUserProfile(null);
     console.log("[AuthContext] Logged out");
   };
 
   return (
-    <AuthContext.Provider value={{ authClient, isAuthenticated, identity, actor, login, logout, loading }}>
+    <AuthContext.Provider value={{ authClient, isAuthenticated, identity, actor, userProfile, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

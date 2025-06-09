@@ -20,20 +20,26 @@ export default function GeminiChatbot({ systemPrompt }: GeminiChatbotProps) {
         setLoading(true);
 
         try {
-            // Always send the system prompt as the first message in the conversation
-            const parts = [];
-            if (!hasSentPrompt) {
-                parts.push({ text: systemPrompt });
-                setHasSentPrompt(true);
-            }
-            parts.push({ text: input });
+            // Build the conversation history for Gemini
+            const conversation = [];
+            // Always start with the system prompt as the first message (as 'model')
+            conversation.push({ role: "model", parts: [{ text: systemPrompt }] });
+
+            // Add all previous messages
+            messages.forEach((msg) => {
+                conversation.push({
+                    role: msg.role === "user" ? "user" : "model",
+                    parts: [{ text: msg.text }]
+                });
+            });
+
+            // Add the new user message
+            conversation.push({ role: "user", parts: [{ text: input }] });
+
+            console.log("Sending to Gemini:", conversation);
 
             const body = JSON.stringify({
-                contents: [
-                    {
-                        parts
-                    }
-                ]
+                contents: conversation
             });
 
             const response = await fetch(GEMINI_API_URL, {
@@ -47,7 +53,7 @@ export default function GeminiChatbot({ systemPrompt }: GeminiChatbotProps) {
             }
 
             const data = await response.json();
-            // Parse the Gemini response
+            console.log("Gemini response:", data);
             const botText =
                 data?.candidates?.[0]?.content?.parts?.[0]?.text ||
                 "Sorry, I couldn't understand the response.";

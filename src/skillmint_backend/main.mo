@@ -17,6 +17,13 @@ actor Main {
   stable var files : [Types.File] = [];
   stable var next_file_id : Nat = 0;
 
+  // Add a demo badge definition
+  let demoBadge : Types.Badge = {
+    name = "SkillMint Pioneer";
+    description = "Awarded for being an early user of SkillMint.";
+    image_url = ?"https://images.unsplash.com/photo-1465101046530-73398c7f28ca";
+  };
+
   // Add a new event
   public func addEvent(profile : Types.EventProfile) : async Nat {
     let id = next_event_id;
@@ -63,7 +70,7 @@ actor Main {
       principal = principal;
       info = {
         profile = profile;
-        badges = [];
+        badges = [{ badge = demoBadge; event_id = 0 }];
         events_created = [];
         events_attending = [];
         created_at = Time.now();
@@ -245,9 +252,9 @@ actor Main {
         badge = {
           name = "AI Advocate";
           description = "Participated in the AI for Good Summit.";
-          image_url = ?"https://images.unsplash.com/photo-1465101178521-c1a9136a3b99";
+          image_url = ?"https://images.unsplash.com/photo-1465101046530-73398c7f28ca";
         };
-        banner_image = ?"https://images.unsplash.com/photo-1465101178521-c1a9136a3b99";
+        banner_image = ?"https://images.unsplash.com/photo-1465101046530-73398c7f28ca";
         attachments = [
           {
             name = "Hackathon_Rules.pdf";
