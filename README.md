@@ -1,26 +1,8 @@
+<div align="center">
+
 [![React](https://img.shields.io/badge/Frontend-React.js-61DAFB?logo=react)](https://react.dev/) [![Motoko](https://img.shields.io/badge/Backend-Motoko-2D6DF6?logo=data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMkQ2REY2IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0wIDE4Yy00LjQxIDAtOC0zLjU5LTgtOHMzLjU5LTggOC04IDggMy41OSA4IDgtMy41OSA4LTggOHoiLz48L3N2Zz4=)](https://internetcomputer.org/docs/current/motoko/main/motoko-intro/) [![ICP](https://img.shields.io/badge/Blockchain-ICP-29ABE2?logo=internet-computer)](https://internetcomputer.org/) [![Internet Identity](https://img.shields.io/badge/Auth-Internet%20Identity-FF9900?logo=internet-computer)](https://identity.ic0.app/) [![Canister Storage](https://img.shields.io/badge/Storage-Canister%20Storage-6E4AFF?logo=internet-computer)](https://internetcomputer.org/docs/current/developer-docs/integrations/storage/) [![GitHub](https://img.shields.io/badge/Dev%20Tools-GitHub-181717?logo=github)](https://github.com/) [![Figma](https://img.shields.io/badge/Design-Figma-F24E1E?logo=figma)](https://figma.com/) [![Excalidraw](https://img.shields.io/badge/Design-Excalidraw-1D1D1D?logo=excalidraw)](https://excalidraw.com/)
 
-@/SkillMint
-
-```mermaid
-<!-- Mermaid diagram will be rendered below -->
-flowchart TD
-  A["Frontend: React.js"] -->|"API Calls"| B["Backend: Motoko (ICP Canister)"]
-  B -->|"On-chain Storage"| C["ICP Native Canister Storage"]
-  A -->|"Auth"| D["Internet Identity"]
-  B -->|"Token/NFT Logic"| E["SMT Token (off-chain, ICRC planned)"]
-  subgraph DevTools
-    F["GitHub"]
-    G["Figma"]
-    H["Excalidraw/draw.io"]
-  end
-  F -.-> A
-  G -.-> A
-  H -.-> A
-  style DevTools fill:#f9f,stroke:#333,stroke-width:2px
-```
-
-*SkillMint leverages a modern Web3 stack: React.js frontend, Motoko smart contracts on ICP, Internet Identity for auth, and native canister storage for secure, scalable, and decentralized student credentialing.*
+</div>
 
 # SkillMint
 
@@ -143,7 +125,7 @@ SkillMint provides:
 
 ---
 
-## �� Call to Action
+## 🪄 Call to Action
 
 We're looking for:
 - 🎓 School partners for pilot integrations
