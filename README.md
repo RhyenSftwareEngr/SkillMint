@@ -11,6 +11,7 @@
 # SkillMint
 
 **Live Demo:** [https://ns4pw-yyaaa-aaaam-aelaa-cai.icp0.io](https://ns4pw-yyaaa-aaaam-aelaa-cai.icp0.io)
+*Note: MVP is currently under active development during the iTHINK Hackathon (Philippine Blockchain Week 2025).*
 
 **Empowering ICT Students through Decentralized Proof of Skills**
 
@@ -23,8 +24,6 @@ SkillMint is a Web3 platform that enables college-level ICT students—especiall
 SkillMint is a decentralized platform designed to empower college-level ICT students—particularly those in provincial areas of the Philippines—by helping them build verifiable, blockchain-based portfolios. Through participation in hackathons, bootcamps, and tech seminars, students can earn NFT credentials and token rewards, showcasing their growth and skills in a trusted, transparent way. SkillMint also provides tools for event organizers to manage participation and issue verifiable badges, with plans to integrate into school systems for broader adoption. Powered by the Internet Computer Protocol (ICP), SkillMint ensures security, scalability, and accessibility for the next generation of tech talent.
 
 ---
-
-@/SkillMint
 
 ```mermaid
 flowchart TD
@@ -72,14 +71,6 @@ SkillMint provides:
 
 - **Primary**: ICT-related college students in the Philippines (especially outside Metro Manila)
 - **Secondary**: Student orgs, tech companies, academic institutions hosting events
-
----
-
-##  Live Demo
-
- https://ns4pw-yyaaa-aaaam-aelaa-cai.icp0.io
-
-*Note: MVP is currently under active development during the iTHINK Hackathon (Philippine Blockchain Week 2025).*
 
 ---
 
