@@ -11,7 +11,6 @@
 # SkillMint
 
 **Live Demo:** [https://ns4pw-yyaaa-aaaam-aelaa-cai.icp0.io](https://ns4pw-yyaaa-aaaam-aelaa-cai.icp0.io)
-*Note: MVP is currently under active development during the iTHINK Hackathon (Philippine Blockchain Week 2025).*
 
 **Empowering ICT Students through Decentralized Proof of Skills**
 
