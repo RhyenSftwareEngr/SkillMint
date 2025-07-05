@@ -24,8 +24,6 @@ SkillMint is a decentralized platform designed to empower college-level ICT stud
 
 ---
 
-@/SkillMint
-
 ```mermaid
 flowchart TD
   A["Frontend: React.js"] -->|"API Calls"| B["Backend: Motoko (ICP Canister)"]
@@ -72,14 +70,6 @@ SkillMint provides:
 
 - **Primary**: ICT-related college students in the Philippines (especially outside Metro Manila)
 - **Secondary**: Student orgs, tech companies, academic institutions hosting events
-
----
-
-##  Live Demo
-
- https://ns4pw-yyaaa-aaaam-aelaa-cai.icp0.io
-
-*Note: MVP is currently under active development during the iTHINK Hackathon (Philippine Blockchain Week 2025).*
 
 ---
 
