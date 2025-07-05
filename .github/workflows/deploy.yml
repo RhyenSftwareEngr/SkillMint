@@ -14,8 +14,10 @@ jobs:
 
       - name: Install DFX
         run: |
-          sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
-          echo 'export PATH="$HOME/bin:$PATH"' >> $GITHUB_ENV
+          curl -o dfx-install.sh https://internetcomputer.org/install.sh
+            chmod +x dfx-install.sh
+            DFX_VERSION=0.27.0 ./dfx-install.sh --yes
+            echo "$HOME/.local/share/dfx/bin" >> $GITHUB_PATH
 
       - name: Decode and write identity.pem
         run: |
