@@ -16,8 +16,9 @@ jobs:
         run: |
           DFX_VERSION=0.27.0
             curl -L -o dfx.tar.gz "https://github.com/dfinity/sdk/releases/download/${DFX_VERSION}/dfx-${DFX_VERSION}-x86_64-linux.tar.gz"
-            tar -xzf dfx.tar.gz
-            ./dfx-${DFX_VERSION}/install.sh --path $HOME/.local/share/dfx
+            mkdir dfx-install
+            tar -xzf dfx.tar.gz -C dfx-install
+            ./dfx-install/dfx-${DFX_VERSION}/install.sh --path "$HOME/.local/share/dfx"
             echo "$HOME/.local/share/dfx/bin" >> $GITHUB_PATH
 
       - name: Decode and write identity.pem
