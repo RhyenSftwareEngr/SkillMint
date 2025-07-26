@@ -11,6 +11,7 @@
 # **Empowering ICT Students through Decentralized Proof of Skills**
 
 Socials: [Facebook](https://www.facebook.com/profile.php?id=61577693313846) and [Twitter](https://x.com/skillmintph/status/1936428982003773634)
+
 Live Demo: [https://ns4pw-yyaaa-aaaam-aelaa-cai.icp0.io](https://ns4pw-yyaaa-aaaam-aelaa-cai.icp0.io)
 
 SkillMint is a Web3 platform that enables college-level tech students to build verifiable skill portfolios, discover tech events, and earn blockchain-backed credentials and token rewards.
