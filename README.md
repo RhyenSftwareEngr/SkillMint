@@ -18,6 +18,8 @@ SkillMint is a Web3 platform that enables college-level tech students to build v
 
 Especially those who are usually untapped just because they don't live in the city.
 
+SkillMint won THIRD PLACE in the ICP iTHink Hackathon organized by [ICP Hubs Philippines](https://x.com/icphub_PH/status/1933070834882519292). For WCHL, we improved upon our business strategy, go-to-market, and conducted thorough market research. In the National Round and beyond, we will make make our tech robust and fully functional with active users.
+
 ---
 
 ## Project Overview
