@@ -22,10 +22,15 @@ Especially those who are usually untapped just because they don't live in the ci
 ## Project Overview
 
 We get people to not only participate, but also build.
+
 ✅ Hackathons
+
 ✅ Bootcamps
+
 ✅ Tech Seminars
+
 ✅ Workshops
+
 ✅ ...more 
 
 students can earn NFT credentials and token rewards, showcasing their growth and skills in a trusted, transparent way. 
