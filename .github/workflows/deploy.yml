@@ -22,15 +22,12 @@ jobs:
           mv dfx-bin ~/.local/share/dfx/bin/dfx
           echo "$HOME/.local/share/dfx/bin" >> $GITHUB_PATH
       
-
-      - name: Decode and write identity.pem
+      - name: Start Local Replica
         run: |
-          mkdir -p ~/.config/dfx/identity/deploy
-          echo "${{ secrets.DFX_IDENTITY_B64 }}" | base64 --decode > ~/.config/dfx/identity/deploy/identity.pem
+          dfx start --background
+          sleep 5  # wait for replica to be ready
 
-      - name: Deploy to IC
-        env:
-          DFX_IDENTITY: deploy
+      - name: Deploy to Local Replica
         run: |
-          dfx identity use deploy
+          dfx identity use default
           dfx deploy

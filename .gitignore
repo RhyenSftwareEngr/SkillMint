@@ -8,7 +8,7 @@
 **/.DS_Store
 
 # dfx temporary files
-.dfx/
+# .dfx/ unignored for hackathon purposes
 
 # generated files
 **/declarations/

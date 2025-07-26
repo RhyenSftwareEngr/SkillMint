@@ -1,0 +1,87 @@
+// Version: 1.0.0
+type Attachment__826875073 = {file_type : Text; name : Text; url : ?Text};
+type Attendee__899256007 =
+  {
+    attendee_principal : Principal;
+    attendee_registration_date : Time__709206284
+  };
+type Badge__663526722 = {description : Text; image_url : ?Text; name : Text};
+type EventInfo__717669687 =
+  {
+    attendees : [Attendee__899256007];
+    created_at : Time__709206284;
+    event_organizers : [Principal];
+    profile : EventProfile__61162066;
+    status : EventStatus__819606755;
+    updated_at : Time__709206284
+  };
+type EventMode__103915955 = {#Hybrid; #Physical; #Virtual};
+type EventProfile__61162066 =
+  {
+    attachments : [Attachment__826875073];
+    badge : Badge__663526722;
+    banner_image : ?Text;
+    event_date : Time__709206284;
+    event_description : Text;
+    event_detail : Text;
+    event_end_date : Time__709206284;
+    event_location : ?Location__514945194;
+    event_mode : EventMode__103915955;
+    event_name : Text;
+    max_attendees : ?Nat;
+    registration_end : Time__709206284;
+    registration_start : Time__709206284;
+    tags : [Text];
+    virtual_link : ?Text
+  };
+type EventStatus__819606755 = {#Cancelled; #Completed; #Ongoing; #Upcoming};
+type Event__680120095 = {id : Nat; info : EventInfo__717669687};
+type File__589948064 =
+  {
+    content : [Nat8];
+    filefile_type : Text;
+    id : Nat;
+    name : Text;
+    uploaded_at : Time__709206284
+  };
+type Location__514945194 =
+  {
+    bldg : ?Text;
+    brgy : ?Text;
+    city : Text;
+    country : Text;
+    establishment : ?Text;
+    street : ?Text;
+    zipcode : ?Text
+  };
+type Time__709206284 = Int;
+type UserInfo__617353126 =
+  {
+    badges : [{badge : Badge__663526722; event_id : Nat}];
+    created_at : Time__709206284;
+    events_attending : [Nat];
+    events_created : [Nat];
+    profile : UserProfile__111006204;
+    updated_at : Time__709206284
+  };
+type UserProfile__111006204 =
+  {
+    affiliation : [Text];
+    bio : ?Text;
+    email : Text;
+    first_name : Text;
+    last_name : Text;
+    location : ?Location__514945194;
+    phone : Text;
+    profile_image : ?Text;
+    skills : [Text];
+    social_links : [{platform : Text; url : Text}]
+  };
+type User__190858547 = {info : UserInfo__617353126; principal : Principal};
+actor {
+  stable var events : [Event__680120095];
+  stable var files : [File__589948064];
+  stable var next_event_id : Nat;
+  stable var next_file_id : Nat;
+  stable var users : [User__190858547]
+};

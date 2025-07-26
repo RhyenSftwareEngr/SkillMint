@@ -1,0 +1,139 @@
+type UserProfile = 
+ record {
+   affiliation: vec text;
+   bio: opt text;
+   email: text;
+   first_name: text;
+   last_name: text;
+   location: opt Location;
+   phone: text;
+   profile_image: opt text;
+   skills: vec text;
+   social_links: vec record {
+                       platform: text;
+                       url: text;
+                     };
+ };
+type UserInfo = 
+ record {
+   badges: vec record {
+                 badge: Badge;
+                 event_id: nat;
+               };
+   created_at: Time;
+   events_attending: vec nat;
+   events_created: vec nat;
+   profile: UserProfile;
+   updated_at: Time;
+ };
+type User = 
+ record {
+   info: UserInfo;
+   "principal": principal;
+ };
+type Time = int;
+type Location = 
+ record {
+   bldg: opt text;
+   brgy: opt text;
+   city: text;
+   country: text;
+   establishment: opt text;
+   street: opt text;
+   zipcode: opt text;
+ };
+type File = 
+ record {
+   content: vec nat8;
+   filefile_type: text;
+   id: nat;
+   name: text;
+   uploaded_at: Time;
+ };
+type EventStatus = 
+ variant {
+   Cancelled;
+   Completed;
+   Ongoing;
+   Upcoming;
+ };
+type EventProfile = 
+ record {
+   attachments: vec Attachment;
+   badge: Badge;
+   banner_image: opt text;
+   event_date: Time;
+   event_description: text;
+   event_detail: text;
+   event_end_date: Time;
+   event_location: opt Location;
+   event_mode: EventMode;
+   event_name: text;
+   max_attendees: opt nat;
+   registration_end: Time;
+   registration_start: Time;
+   tags: vec text;
+   virtual_link: opt text;
+ };
+type EventMode = 
+ variant {
+   Hybrid;
+   Physical;
+   Virtual;
+ };
+type EventInfo = 
+ record {
+   attendees: vec Attendee;
+   created_at: Time;
+   event_organizers: vec principal;
+   profile: EventProfile;
+   status: EventStatus;
+   updated_at: Time;
+ };
+type Event = 
+ record {
+   id: nat;
+   info: EventInfo;
+ };
+type Components = 
+ record {
+   day: nat;
+   hour: nat;
+   minute: nat;
+   month: nat;
+   nanosecond: nat;
+   year: int;
+ };
+type Badge = 
+ record {
+   description: text;
+   image_url: opt text;
+   name: text;
+ };
+type Attendee = 
+ record {
+   attendee_principal: principal;
+   attendee_registration_date: Time;
+ };
+type Attachment = 
+ record {
+   file_type: text;
+   name: text;
+   url: opt text;
+ };
+service : {
+  addDemoEvents: () -> ();
+  addEvent: (profile: EventProfile) -> (nat);
+  addUser: ("principal": principal, profile: UserProfile) -> ();
+  getEvent: (id: nat) -> (opt Event) query;
+  getEvents: () -> (vec Event) query;
+  getFile: (id: nat) -> (opt File) query;
+  getTimeNow: () -> (Components) query;
+  getUpcomingEvents: () -> (vec Event) query;
+  getUser: ("principal": principal) -> (opt User) query;
+  getUsers: () -> (vec User) query;
+  greet: (name: text) -> (text);
+  updateUserProfile: ("principal": principal, profile: UserProfile) -> (bool);
+  uploadFile: (name: text, content: vec nat8, filefile_type: text) -> (nat);
+  whoAmI: () -> (principal) query;
+}
