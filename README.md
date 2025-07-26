@@ -8,19 +8,30 @@
 
 </div>
 
-# SkillMint
+# **Empowering ICT Students through Decentralized Proof of Skills**
+
+Socials: [Facebook](https://www.facebook.com/profile.php?id=61577693313846) and [Twitter](https://x.com/skillmintph/status/1936428982003773634)
 
 **Live Demo:** [https://ns4pw-yyaaa-aaaam-aelaa-cai.icp0.io](https://ns4pw-yyaaa-aaaam-aelaa-cai.icp0.io)
 
-**Empowering ICT Students through Decentralized Proof of Skills**
+SkillMint is a Web3 platform that enables college-level tech students to build verifiable skill portfolios, discover tech events, and earn blockchain-backed credentials and token rewards.
 
-SkillMint is a Web3 platform that enables college-level ICT students—especially those in provincial areas of the Philippines—to build verifiable skill portfolios, discover tech events, and earn blockchain-backed credentials and token rewards.
+Especially those who are usually untapped just because they don't live in the city.
 
 ---
 
 ## Project Overview
 
-SkillMint is a decentralized platform designed to empower college-level ICT students—particularly those in provincial areas of the Philippines—by helping them build verifiable, blockchain-based portfolios. Through participation in hackathons, bootcamps, and tech seminars, students can earn NFT credentials and token rewards, showcasing their growth and skills in a trusted, transparent way. SkillMint also provides tools for event organizers to manage participation and issue verifiable badges, with plans to integrate into school systems for broader adoption. Powered by the Internet Computer Protocol (ICP), SkillMint ensures security, scalability, and accessibility for the next generation of tech talent.
+We get people to not only participate, but also build.
+✅ Hackathons
+✅ Bootcamps
+✅ Tech Seminars
+✅ Workshops
+✅ ...more 
+
+students can earn NFT credentials and token rewards, showcasing their growth and skills in a trusted, transparent way. 
+
+SkillMint also provides tools for event organizers to manage participation and issue verifiable badges, with plans to integrate into school systems for broader adoption. Powered by the Internet Computer Protocol (ICP), SkillMint ensures security, scalability, and accessibility for the next generation of tech talent.
 
 ---
 
@@ -39,28 +50,21 @@ flowchart TD
   G -.-> A
   H -.-> A
   style DevTools fill:#f9f,stroke:#333,stroke-width:2px
-```
-
-*SkillMint leverages a modern Web3 stack: React.js frontend, Motoko smart contracts on ICP, Internet Identity for auth, and native canister storage for secure, scalable, and decentralized student credentialing.*
-
 ---
 
-## Problem It Solves
+## Problems
 
 - Lack of credible proof for extracurricular learning
 - Limited access to national-level events for students in provinces
 - Scattered or fake digital credentials
 - Low motivation for students to join events without clear benefits
-- No trusted system for organizers to verify participation
 
 ---
 
-## Solution Overview
+## Solution 
 
-SkillMint provides:
 - **Student Portfolios** secured by blockchain (ICP)
 - **Event Discovery** and application system
-- **NFT Credentialing** and token rewards for verified participation
 - **Organizer Tools** for event creation, verification, and token allocation
 - **Future Integration** with school systems (e.g., LMS, registrar offices)
 
@@ -73,19 +77,6 @@ SkillMint provides:
 
 ---
 
-## Tech Stack
-
-| Layer              | Technology                           |
-|-------------------|---------------------------------------|
-| Frontend          | React.js                              |
-| Backend           | Motoko (Internet Computer Protocol)   |
-| Blockchain        | Internet Computer Protocol (ICP)      |
-| Auth              | Internet Identity                     |
-| Storage           | ICP Native Canister Storage           |
-| Dev Tools         | GitHub, Figma, Excalidraw, draw.io    |
-
----
-
 ## Roadmap
 
 | Phase | Milestone                                      | Timeline |
@@ -93,7 +84,6 @@ SkillMint provides:
 | 1     | MVP (profile + events + basic verification)    | June 2025|
 | 2     | Token reward system + school onboarding        | Q3 2025  |
 | 3     | University pilot + school system integrations  | Q4 2025  |
-| 4     | SMT token on-chain (ICRC standard)             | Q1 2026  |
 
 ---
 
@@ -118,19 +108,6 @@ SkillMint provides:
 | Peer Feedback             | +5 SMT      |
 | Referral/Invites          | +10 SMT     |
 
-*Tokens will be off-chain in MVP and transition to ICRC-based on-chain format post-hackathon.*
-
----
-
-## 🌐 Why ICP?
-
-- 🔐 Seamless login via Internet Identity
-- ⚡ Fast, web-native dApps with Motoko
-- 📦 On-chain data storage (no IPFS bridges needed)
-- 💸 Low-cost smart contracts + NFT minting
-- 🔄 Future-proof token interoperability (ICRC standards)
-
----
 
 ## 👨‍👩‍👧‍👦 The Team
 
@@ -149,30 +126,11 @@ We're looking for:
 - 🏢 Event organizers and tech sponsors
 - 💡 Mentors, developers, and community supporters
 
-Reach out via LT05marc@gmail.com.
-
-# `skillmint`
-
-Welcome to your new `skillmint` project and to the Internet Computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
-
-To get started, you might want to explore the project directory structure and the default configuration file. Working with this project in your development environment will not affect any production deployment or identity tokens.
-
-To learn more before you start working with `skillmint`, see the following documentation available online:
-
-- [Quick Start](https://internetcomputer.org/docs/current/developer-docs/setup/deploy-locally)
-- [SDK Developer Tools](https://internetcomputer.org/docs/current/developer-docs/setup/install)
-
-If you want to start working on your project right away, you might want to try the following commands:
-
-```bash
-cd skillmint/
-dfx help
-dfx canister --help
-```
+Reach out via semariquit@gmail.com.
 
 ## Running the project locally
 
-If you want to test your project locally, you can use the following commands:
+Use the following commands:
 
 ```bash
 # Starts the replica, running in the background
