@@ -5,6 +5,7 @@ import { DashboardPageWithProtection } from "./pages/DashboardPage";
 import EventDetailsPage from "./pages/EventDetailsPage";
 import CreatedEventDetailsPage from "./pages/CreatedEventDetailsPage"; // new!
 import SkillMintChatbotLauncher from "./components/SkillMintChatbotLauncher";
+import AgenticAI from "AgenticAILibrary"
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
             element={<CreatedEventDetailsPage />}
           />
         </Routes>
+        <Agent div="root">
       </div>
       <SkillMintChatbotLauncher />
     </>
