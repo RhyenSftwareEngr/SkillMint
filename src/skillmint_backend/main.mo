@@ -107,6 +107,7 @@ actor Main {
               events_attending = u.info.events_attending;
               created_at = u.info.created_at;
               updated_at = Time.now();
+              agent = Agent.initialize()
             };
           };
         } else {
