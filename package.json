@@ -18,7 +18,8 @@
   "dependencies": {
     "@dfinity/identity": "^2.4.1",
     "dotenv": "^16.5.0",
-    "react-toastify": "^11.0.5"
+    "react-toastify": "^11.0.5",
+    "agentic": "^1.0.9"
   },
   "devDependencies": {
     "@types/node": "^22.15.30"
