@@ -17,6 +17,14 @@ Live Demo: [https://ns4pw-yyaaa-aaaam-aelaa-cai.icp0.io](https://ns4pw-yyaaa-aaa
 Demo Video:
 [https://youtube.com/shorts/fp9w-lDkIMg?si=sZKT_gGRKBK-kAg9](https://youtube.com/shorts/fp9w-lDkIMg?si=sZKT_gGRKBK-kAg9)
 
+🚀 National Round: A New Beginning
+Our journey with SkillMint didn't end with a podium finish. For the National Round, our team executed a strategic masterplan to transform our hackathon project into a real-world venture. In just one month, we have:
+ * Secured our Future: We've successfully applied for the Sulong Luzon Startup Grant, a crucial step in securing the funding needed to bring SkillMint to life.
+ * Launched a Marketing Blitz: We amplified our online presence, engaging with students and organizations across the country to build a powerful community and generate buzz.
+ * Forged Strategic Alliances: We’ve initiated and secured crucial partnerships with academic institutions, paving the way for pilot integrations and user adoption.
+We are not just building a project; we are building the future of skills for the next generation of tech talent. With a clear one-year roadmap and an unwavering commitment, we are ready to take SkillMint from a winning concept to a fully deployed, impactful platform.
+
+
 SkillMint is a Web3 platform that enables college-level tech students to build verifiable skill portfolios, discover tech events, and earn blockchain-backed credentials and token rewards.
 
 Especially those who are usually untapped just because they don't live in the city.
