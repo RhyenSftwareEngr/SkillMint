@@ -14,6 +14,9 @@ Socials: [Facebook](https://www.facebook.com/profile.php?id=61577693313846) and 
 
 Live Demo: [https://ns4pw-yyaaa-aaaam-aelaa-cai.icp0.io](https://ns4pw-yyaaa-aaaam-aelaa-cai.icp0.io)
 
+Demo Video:
+[https://youtube.com/shorts/fp9w-lDkIMg?si=sZKT_gGRKBK-kAg9](https://youtube.com/shorts/fp9w-lDkIMg?si=sZKT_gGRKBK-kAg9)
+
 SkillMint is a Web3 platform that enables college-level tech students to build verifiable skill portfolios, discover tech events, and earn blockchain-backed credentials and token rewards.
 
 Especially those who are usually untapped just because they don't live in the city.
